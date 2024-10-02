@@ -1,28 +1,27 @@
 package com.dip.danielaraujo.dip_project.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.*;
 
 @Entity
 @Table(name = "user_rating")
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserRatingEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private double numberOfStars;
-    private int assessmentAmount;
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private ClientEntity client;
 
-    @ManyToMany(mappedBy = "userRatings")
-    private List<ClientEntity> clients;
+    @ManyToOne
+    @JoinColumn(name = "dip_id")
+    private DipEntity dip;
 
-    @ManyToMany(mappedBy = "userRatings")
-    private List<DipEntity> dips;
+    private double numberOfStars; // Atributo extra
 }

@@ -30,11 +30,6 @@ public class DipEntity {
     @JoinColumn(name = "owner_id")
     private OwnerEntity owner;
 
-    @ManyToMany
-    @JoinTable(
-            name = "dip_user_rating",
-            joinColumns = @JoinColumn(name = "dip_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_rating_id")
-    )
-    private List<UserRatingEntity> userRatings;
+    @OneToMany(mappedBy = "dip", cascade = CascadeType.ALL)
+    private List<UserRatingEntity> userRatings; // Relacionamento OneToMany com UserRatingEntity
 }

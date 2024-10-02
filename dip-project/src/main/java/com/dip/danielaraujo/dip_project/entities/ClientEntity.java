@@ -29,13 +29,8 @@ public class ClientEntity {
     @JoinColumn(name = "authentication_user", referencedColumnName = "user")
     private AuthenticationEntity authentication;
 
-    @ManyToMany
-    @JoinTable(
-            name = "client_user_rating",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_rating_id")
-    )
-    private List<UserRatingEntity> userRatings;
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private List<UserRatingEntity> userRatings; // Relacionamento OneToMany com UserRatingEntity
 
     public Long getId() {
         return id;

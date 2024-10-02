@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class AuthenticationEntity {
     @Id
-    private String user;
+    private String email;
     private String password;
 
     @OneToMany(mappedBy = "authentication")
