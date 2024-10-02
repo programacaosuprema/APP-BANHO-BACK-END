@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientService {
-    List<ClientDTO> clients = new ArrayList<>();
-    public List<ClientDTO> create(ClientEntity entity){
-        ClientDTO clientDTO = ClientDTO.fromEntity(entity);
-        clients.add(clientDTO);
+    List<ClientEntity> clients = new ArrayList<>();
+    public List<ClientEntity> create(ClientDTO clientDTO){
+        ClientEntity entity = ClientDTO.toEntity(clientDTO);
+        clients.add(entity);
         return clients;
     }
 }
