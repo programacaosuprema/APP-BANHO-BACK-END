@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e2a53a75-07fe-4291-9070-6f07956dcbf2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/dip-project/src/main/java/com/dip/danielaraujo/dip_project/dtos/ImageDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dip-project/src/main/java/com/dip/danielaraujo/dip_project/dtos/ClientDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dip-project/src/main/java/com/dip/danielaraujo/dip_project/dtos/ClientDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dip-project/src/main/java/com/dip/danielaraujo/dip_project/entities/ClientEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/dip-project/src/main/java/com/dip/danielaraujo/dip_project/entities/ClientEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dip-project/src/main/java/com/dip/danielaraujo/dip_project/entities/ImageEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/dip-project/src/main/java/com/dip/danielaraujo/dip_project/entities/ImageEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dip-project/src/main/java/com/dip/danielaraujo/dip_project/services/ClientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dip-project/src/main/java/com/dip/danielaraujo/dip_project/services/ClientService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dip-project/src/test/java/com/dip/danielaraujo/dip_project/ClientServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/dip-project/src/test/java/com/dip/danielaraujo/dip_project/ClientServiceTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="2mtcHokmi0nKXZbWOx0ZilY5A5L" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/danni/OneDrive/Documentos/GitHub/APP-BANHO-BACK-END/dip-project"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e2a53a75-07fe-4291-9070-6f07956dcbf2" name="Changes" comment="" />
+      <created>1727899227617</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1727899227617</updated>
+    </task>
+    <servers />
+  </component>
+</project>
