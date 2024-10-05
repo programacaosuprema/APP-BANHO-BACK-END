@@ -23,7 +23,7 @@ public class DipEntity {
     private String city;
     private double temperature;
     @Enumerated(EnumType.STRING)
-    private AccessType access; // "PRIVATE" ou "PUBLIC"
+    private AccessType access; // "PRIVATE" or "PUBLIC"
     private String location;
 
     @ManyToOne
@@ -31,5 +31,5 @@ public class DipEntity {
     private OwnerEntity owner;
 
     @OneToMany(mappedBy = "dip", cascade = CascadeType.ALL)
-    private List<UserRatingEntity> userRatings; // Relacionamento OneToMany com UserRatingEntity
+    private List<UserRatingEntity> userRatings;
 }
