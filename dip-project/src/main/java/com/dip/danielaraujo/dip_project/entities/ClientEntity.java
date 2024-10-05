@@ -23,11 +23,11 @@ public class ClientEntity {
     private String email;
     private String phoneNumber;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(name = "image_id")
     private ImageEntity image;
 
-    @OneToOne(mappedBy = "client")
+    @OneToOne(mappedBy = "client", cascade = CascadeType.PERSIST, optional = false)
     private AuthenticationEntity authentication;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
@@ -39,5 +39,6 @@ public class ClientEntity {
         this.email = clientDTO.email();
         this.phoneNumber = clientDTO.phoneNumber();
         this.image =  new ImageEntity(clientDTO.image());
+        this.authentication = new AuthenticationEntity(clientDTO.email(), clientDTO.password(), this);
     }
 }

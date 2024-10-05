@@ -20,8 +20,8 @@ public class OwnerService {
     public List<OwnerDTO> getAllOwners() {
         List<OwnerEntity> owners = ownerRepository.findAll();
         return owners.stream()
-                .map(OwnerDTO::fromEntity) // Converte cada OwnerEntity para OwnerDTO
-                .collect(Collectors.toList()); // Coleta os resultados em uma lista
+                .map(OwnerDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
 
