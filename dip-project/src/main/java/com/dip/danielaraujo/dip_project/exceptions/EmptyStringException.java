@@ -1,4 +1,4 @@
-package com.dip.danielaraujo.dip_project.Exceptions;
+package com.dip.danielaraujo.dip_project.exceptions;
 
 public class EmptyStringException extends RuntimeException{
     public EmptyStringException() {

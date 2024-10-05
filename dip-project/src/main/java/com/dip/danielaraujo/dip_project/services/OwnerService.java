@@ -6,9 +6,6 @@ import com.dip.danielaraujo.dip_project.repositories.OwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
-
-import javax.swing.text.html.parser.Entity;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,24 +21,18 @@ public class OwnerService {
                 .collect(Collectors.toList());
     }
 
-
-    public OwnerEntity getOwnerById(Long id) {
-        return ownerRepository.findById(id).orElseThrow(() -> new ExpressionException("Owner not found"));
+    public OwnerDTO getOwnerById(Long id) {
+        return new OwnerDTO(ownerRepository.findById(id).orElseThrow(() -> new ExpressionException("Owner not found")));
     }
 
     public OwnerDTO createOwner(OwnerDTO owner) {
         return new OwnerDTO(ownerRepository.save(new OwnerEntity(owner)));
     }
 
-    public OwnerEntity updateOwner(Long id, OwnerEntity ownerDetails) {
-        OwnerEntity owner = getOwnerById(id);
-        owner.setName(ownerDetails.getName());
-        owner.setContact(ownerDetails.getContact());
-        return ownerRepository.save(owner);
-    }
-
-    public void deleteOwner(Long id) {
-        OwnerEntity owner = getOwnerById(id);
-        ownerRepository.delete(owner);
+    public OwnerDTO updateOwner(Long id, OwnerDTO ownerDTO) {
+        OwnerEntity owner =  new OwnerEntity(getOwnerById(id));
+        owner.setName(ownerDTO.name());
+        owner.setContact(ownerDTO.contact());
+        return new OwnerDTO(ownerRepository.save(owner));
     }
 }

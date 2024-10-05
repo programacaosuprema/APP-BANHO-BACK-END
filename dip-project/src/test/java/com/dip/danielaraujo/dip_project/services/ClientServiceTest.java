@@ -1,6 +1,6 @@
 package com.dip.danielaraujo.dip_project.services;
 
-import com.dip.danielaraujo.dip_project.Exceptions.EmptyStringException;
+import com.dip.danielaraujo.dip_project.exceptions.EmptyStringException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.dtos.ImageDTO;
 import jakarta.transaction.Transactional;

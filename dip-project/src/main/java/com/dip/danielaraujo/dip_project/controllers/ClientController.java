@@ -1,6 +1,6 @@
 package com.dip.danielaraujo.dip_project.controllers;
 
-import com.dip.danielaraujo.dip_project.Exceptions.EmptyStringException;
+import com.dip.danielaraujo.dip_project.exceptions.EmptyStringException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
