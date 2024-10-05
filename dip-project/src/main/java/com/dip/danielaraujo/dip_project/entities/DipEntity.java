@@ -23,7 +23,7 @@ public class DipEntity {
     private String city;
     private double temperature;
     @Enumerated(EnumType.STRING)
-    private AccessType access; // "PRIVADO" ou "PUBLICO"
+    private AccessType access; // "PRIVATE" ou "PUBLIC"
     private String location;
 
     @ManyToOne

@@ -30,7 +30,7 @@ public class OwnerService {
     }
 
     public OwnerDTO createOwner(OwnerDTO owner) {
-        return OwnerDTO.fromEntity(ownerRepository.save(OwnerDTO.toEntity(owner)));
+        return new OwnerDTO(ownerRepository.save(new OwnerEntity(owner)));
     }
 
     public OwnerEntity updateOwner(Long id, OwnerEntity ownerDetails) {
