@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OwnerEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;

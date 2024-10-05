@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ClientEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
