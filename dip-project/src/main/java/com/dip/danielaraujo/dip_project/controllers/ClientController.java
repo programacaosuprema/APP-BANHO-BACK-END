@@ -20,11 +20,20 @@ public class ClientController {
         try {
             ClientDTO createdClient = clientService.create(clientDTO);
             return ResponseEntity.ok(createdClient);
-        } catch (Exception e){
+        } catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO) {
+        try {
+            ClientDTO updatedClient = clientService.update(id, clientDTO);
+            return ResponseEntity.ok(updatedClient);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
     @GetMapping("/{name}")
     public ResponseEntity<?> findClientByName(@PathVariable String name) {
         try{

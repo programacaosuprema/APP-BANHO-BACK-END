@@ -7,14 +7,12 @@ import com.dip.danielaraujo.dip_project.exceptions.InvalidDataFromClientExceptio
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.entities.ClientEntity;
 import com.dip.danielaraujo.dip_project.repositories.ClientRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.ExpressionException;
-import org.springframework.stereotype.Service;
-
-import java.util.Collections;
+import org.springframework.stereotype.Service;;
 import java.util.List;
-import java.util.Optional;
-
+import com.dip.danielaraujo.dip_project.repositories.AutheticationRepository;
 @Service
 public class ClientService {
     @Autowired
@@ -23,8 +21,11 @@ public class ClientService {
     @Autowired
     private ValidationService validate;
 
+    @Autowired
+    private AutheticationRepository authentication;
+
     public ClientDTO findById(Long id){
-        return new ClientDTO(this.clientRepository.findById(id).orElseThrow(() -> new ExpressionException("Client not found")));
+        return new ClientDTO(this.clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Client not found")));
     }
 
     public ClientDTO create(ClientDTO clientDTO){
@@ -59,24 +60,29 @@ public class ClientService {
         return this.clientRepository.findAll().stream().map(ClientDTO::fromEntity).toList();
     }
 
-    public ClientDTO update(Long id, ClientDTO clientDTO){
-        ClientEntity client = new ClientEntity(this.findById(id));
+    @Transactional
+    public ClientDTO update(Long id, ClientDTO clientDTO) {
+        ClientEntity existingClient = clientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
 
-        this.validate.validateClient(clientDTO);
+        if (!existingClient.getEmail().equals(clientDTO.email())) {
+            this.authentication.delete(existingClient.getAuthentication());
 
-        client.setFirstName(clientDTO.firstName());
-        client.setLastName(clientDTO.lastName());
-        client.setEmail(clientDTO.email());
-        client.setPhoneNumber(clientDTO.phoneNumber());
-
-        client.setAuthentication(new AuthenticationEntity(clientDTO.email(), clientDTO.password(), client));
-
-        if (clientDTO.image() != null) {
-            client.setImage(new ImageEntity(clientDTO.image().id(), clientDTO.image().name(), clientDTO.image().src(), client));
-        } else {
-            client.setImage(null);
+            AuthenticationEntity newAuth = new AuthenticationEntity(clientDTO.email(), clientDTO.password());
+            existingClient.setAuthentication(newAuth);  // Atualiza a autenticação
         }
 
-        return new ClientDTO(client);
+        // Atualizar outros dados do cliente
+        existingClient.setFirstName(clientDTO.firstName());
+        existingClient.setLastName(clientDTO.lastName());
+        existingClient.setPhoneNumber(clientDTO.phoneNumber());
+
+        if (clientDTO.image() != null) {
+            existingClient.setImage(new ImageEntity(clientDTO.image()));
+        }
+
+        clientRepository.save(existingClient);
+
+        return new ClientDTO(existingClient);
     }
 }
