@@ -22,7 +22,12 @@ public class ImageEntity {
     private ClientEntity client;
 
     public ImageEntity(ImageDTO imageDTO){
-        this.name = imageDTO.name();
-        this.src = imageDTO.src();
+        if (imageDTO != null) {
+            this.name = imageDTO.name();
+            this.src = imageDTO.src();
+        } else {
+            this.name = null;
+            this.src = null;
+        }
     }
 }
