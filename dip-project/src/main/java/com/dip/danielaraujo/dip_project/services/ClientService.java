@@ -2,6 +2,7 @@ package com.dip.danielaraujo.dip_project.services;
 
 import com.dip.danielaraujo.dip_project.entities.AuthenticationEntity;
 import com.dip.danielaraujo.dip_project.entities.ImageEntity;
+import com.dip.danielaraujo.dip_project.exceptions.ClientNotFoundException;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataFromClientException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.entities.ClientEntity;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +31,7 @@ public class ClientService {
 
         this.validate.validateClient(clientDTO);
 
-        if (this.clientRepository.existsByEmail(clientDTO.email())){
+        if(this.clientRepository.existsByEmail(clientDTO.email())){
             throw new RuntimeException("Email já cadastrado");
         }else {
             ClientEntity clientEntity = new ClientEntity(clientDTO);
@@ -37,15 +39,20 @@ public class ClientService {
         }
     }
 
-    public ClientDTO findByName(String name){
+    public List<ClientDTO> findByName(String name){
         String str = "cannot be empty.";
+
         if (name.isBlank()){
             throw new InvalidDataFromClientException("The first name " + str);
         }
 
-        Optional<ClientEntity> client = this.clientRepository.findClientByFirstName(name);
+        List<ClientEntity> clients = this.clientRepository.findByFirstName(name);
 
-        return client.map(ClientDTO::new).orElse(null);
+        if (clients.isEmpty()) {
+            throw new ClientNotFoundException("No clients found with the name: " + name);
+        }
+
+        return clients.stream().map(ClientDTO::fromEntity).toList();
     }
 
     public List<ClientDTO> findAll(){

@@ -1,5 +1,6 @@
 package com.dip.danielaraujo.dip_project.services;
 
+import com.dip.danielaraujo.dip_project.exceptions.ClientNotFoundException;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataFromClientException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.dtos.ImageDTO;
@@ -9,6 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -45,12 +49,12 @@ public class ClientServiceTest {
     @Test
     @DisplayName("Should create a client with a image in database and return just one client from database")
     public void createClientWithJDBCIntegrityConstraintViolationExceptionSuccess() {
-        ClientDTO createdClient1 = this.clientService.create(this.createClient(this.name, this.lastName,
+        this.clientService.create(this.createClient(this.name, this.lastName,
                 this.email, this.phoneNumber, this.imageDTO , this.password));
         ClientDTO createdClient2 = this.clientService.create(this.createClient(this.name, this.lastName,
-                this.email, this.phoneNumber, this.imageDTO , this.password));
+                "email2@gmail.com", this.phoneNumber, this.imageDTO , this.password));
 
-        assertThrowsExactly(JdbcSQLIntegrityConstraintViolationException.class, () -> this.clientService.create(createdClient2));
+        assertThrowsExactly(RuntimeException.class, () -> this.clientService.create(createdClient2));
     }
 
     @Test
@@ -97,8 +101,7 @@ public class ClientServiceTest {
     @Test
     @DisplayName("Should not get client from database when client not exists")
     public void ClientIsNotFound() {
-        ClientDTO client = this.clientService.findByName("Daniel");
-        assertNull(client);
+        assertThrowsExactly(ClientNotFoundException.class, () -> this.clientService.findByName("Daniel"));
     }
 
     @Test

@@ -28,10 +28,10 @@ public class ClientController {
     @GetMapping("/{name}")
     public ResponseEntity<?> findClientByName(@PathVariable String name) {
         try{
-            ClientDTO clientDTO = clientService.findByName(name);
+            List<ClientDTO> clients = clientService.findByName(name);
 
-            if (clientDTO != null) {
-                return ResponseEntity.ok(clientDTO);
+            if (!clients.isEmpty()) {
+                return ResponseEntity.ok(clients);
             } else {
                 return ResponseEntity.notFound().build();
             }
