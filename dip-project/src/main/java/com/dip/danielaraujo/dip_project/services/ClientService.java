@@ -29,9 +29,12 @@ public class ClientService {
 
         this.validate.validateClient(clientDTO);
 
-        ClientEntity clientEntity = new ClientEntity(clientDTO);
-
-        return new ClientDTO(clientRepository.save(clientEntity));
+        if (this.clientRepository.existsByEmail(clientDTO.email())){
+            throw new RuntimeException("Email já cadastrado");
+        }else {
+            ClientEntity clientEntity = new ClientEntity(clientDTO);
+            return new ClientDTO(clientRepository.save(clientEntity));
+        }
     }
 
     public ClientDTO findByName(String name){

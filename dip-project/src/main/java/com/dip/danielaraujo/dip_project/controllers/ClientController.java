@@ -6,7 +6,6 @@ import com.dip.danielaraujo.dip_project.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -21,7 +20,7 @@ public class ClientController {
         try {
             ClientDTO createdClient = clientService.create(clientDTO);
             return ResponseEntity.ok(createdClient);
-        } catch (InvalidDataFromClientException e) {
+        } catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

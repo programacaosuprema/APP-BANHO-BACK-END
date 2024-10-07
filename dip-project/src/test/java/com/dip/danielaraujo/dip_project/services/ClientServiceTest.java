@@ -4,6 +4,7 @@ import com.dip.danielaraujo.dip_project.exceptions.InvalidDataFromClientExceptio
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.dtos.ImageDTO;
 import jakarta.transaction.Transactional;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,17 @@ public class ClientServiceTest {
         assertEquals(createdClient.image().name(), this.imageDTO.name());
         assertEquals(createdClient.image().src(), this.imageDTO.src());
         assertEquals(createdClient.password(), password);
+    }
+
+    @Test
+    @DisplayName("Should create a client with a image in database and return just one client from database")
+    public void createClientWithJDBCIntegrityConstraintViolationExceptionSuccess() {
+        ClientDTO createdClient1 = this.clientService.create(this.createClient(this.name, this.lastName,
+                this.email, this.phoneNumber, this.imageDTO , this.password));
+        ClientDTO createdClient2 = this.clientService.create(this.createClient(this.name, this.lastName,
+                this.email, this.phoneNumber, this.imageDTO , this.password));
+
+        assertThrowsExactly(JdbcSQLIntegrityConstraintViolationException.class, () -> this.clientService.create(createdClient2));
     }
 
     @Test
