@@ -1,6 +1,6 @@
 package com.dip.danielaraujo.dip_project.controllers;
 
-import com.dip.danielaraujo.dip_project.exceptions.EmptyStringException;
+import com.dip.danielaraujo.dip_project.exceptions.InvalidDataFromClientException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class ClientController {
         try {
             ClientDTO createdClient = clientService.create(clientDTO);
             return ResponseEntity.ok(createdClient);
-        } catch (EmptyStringException e) {
+        } catch (InvalidDataFromClientException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -37,7 +37,7 @@ public class ClientController {
                 return ResponseEntity.notFound().build();
             }
 
-        } catch (EmptyStringException e) {
+        } catch (InvalidDataFromClientException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -53,7 +53,7 @@ public class ClientController {
                 return ResponseEntity.notFound().build();
             }
 
-        } catch (EmptyStringException e) {
+        } catch (InvalidDataFromClientException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

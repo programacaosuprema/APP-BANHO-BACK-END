@@ -1,19 +1,19 @@
 package com.dip.danielaraujo.dip_project.exceptions;
 
-public class ValidateClientException extends RuntimeException{
-    public ValidateClientException() {
+public class InvalidDataFromClientException extends RuntimeException{
+    public InvalidDataFromClientException() {
         super("The string cannot be empty");
     }
 
-    public ValidateClientException(String message) {
+    public InvalidDataFromClientException(String message) {
         super(message);
     }
 
-    public ValidateClientException(String message, Throwable cause) {
+    public InvalidDataFromClientException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ValidateClientException(Throwable cause) {
+    public InvalidDataFromClientException(Throwable cause) {
         super(cause);
     }
 }
