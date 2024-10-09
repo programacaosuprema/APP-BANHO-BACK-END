@@ -3,7 +3,7 @@ package com.dip.danielaraujo.dip_project.services;
 import com.dip.danielaraujo.dip_project.entities.AuthenticationEntity;
 import com.dip.danielaraujo.dip_project.entities.ImageEntity;
 import com.dip.danielaraujo.dip_project.exceptions.ClientNotFoundException;
-import com.dip.danielaraujo.dip_project.exceptions.InvalidDataFromClientException;
+import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.entities.ClientEntity;
 import com.dip.danielaraujo.dip_project.repositories.ClientRepository;
@@ -18,8 +18,8 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-    @Autowired
-    private ValidationService validate;
+        @Autowired
+        private ValidationService validate;
 
     @Autowired
     private AutheticationRepository authentication;
@@ -30,7 +30,7 @@ public class ClientService {
 
     public ClientDTO create(ClientDTO clientDTO){
 
-        this.validate.validateClient(clientDTO);
+        this.validate = new ValidationService(clientDTO);
 
         if(this.clientRepository.existsByEmail(clientDTO.email())){
             throw new RuntimeException("Email já cadastrado");
@@ -44,7 +44,7 @@ public class ClientService {
         String str = "cannot be empty.";
 
         if (name.isBlank()){
-            throw new InvalidDataFromClientException("The first name " + str);
+            throw new InvalidDataException("The first name " + str);
         }
 
         List<ClientEntity> clients = this.clientRepository.findByFirstName(name);
@@ -68,7 +68,7 @@ public class ClientService {
         if (!existingClient.getEmail().equals(clientDTO.email())) {
             this.authentication.delete(existingClient.getAuthentication());
 
-            AuthenticationEntity newAuth = new AuthenticationEntity(clientDTO.email(), clientDTO.password());
+            AuthenticationEntity newAuth = new AuthenticationEntity(clientDTO.email(), clientDTO.password(), existingClient);
             existingClient.setAuthentication(newAuth);  // Atualiza a autenticação
         }
 

@@ -1,17 +1,14 @@
 package com.dip.danielaraujo.dip_project.services;
 
 import com.dip.danielaraujo.dip_project.exceptions.ClientNotFoundException;
-import com.dip.danielaraujo.dip_project.exceptions.InvalidDataFromClientException;
+import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.dtos.ImageDTO;
 import jakarta.transaction.Transactional;
-import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -107,7 +104,7 @@ public class ClientServiceTest {
     @Test
     @DisplayName("Should throw a InvalidDataFromClientException when client first name is empty")
     public void FindClientWhenClientFirstNameIsEmpty() {
-        assertThrowsExactly(InvalidDataFromClientException.class, () -> this.clientService.findByName(""));
+        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.findByName(""));
     }
 
     @Test
@@ -115,28 +112,28 @@ public class ClientServiceTest {
     public void createClientInvalidDataFromClientExceptionWhenClientFirstNameIsEmpty() {
             ClientDTO createdClient = this.createClient("", this.lastName,
                     this.email, this.phoneNumber, this.imageDTO , this.password);
-            assertThrowsExactly(InvalidDataFromClientException.class, () -> this.clientService.create(createdClient));
+            assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
     }
     @Test
     @DisplayName("Should throw a InvalidDataFromClientException when client email is empty")
     public void createClientInvalidDataFromClientExceptionWhenClientEmailIsEmpty() {
         ClientDTO createdClient = this.createClient(this.name, this.lastName,
                 "", this.phoneNumber, this.imageDTO , this.password);
-        assertThrowsExactly(InvalidDataFromClientException.class, () -> this.clientService.create(createdClient));
+        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
     }
     @Test
     @DisplayName("Should throw a InvalidDataFromClientException when client phone number is empty")
     public void createClientInvalidDataFromClientExceptionWhenClientPhoneNumberIsEmpty() {
         ClientDTO createdClient = this.createClient(this.name, this.lastName,
                 this.email, "", this.imageDTO , this.password);
-        assertThrowsExactly(InvalidDataFromClientException.class, () -> this.clientService.create(createdClient));
+        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
     }
     @Test
     @DisplayName("Should throw a InvalidDataFromClientException when client password is empty")
     public void createClientInvalidDataFromClientExceptionWhenClientPasswordIsEmpty() {
         ClientDTO createdClient = this.createClient(this.name, this.lastName,
                 this.email, this.phoneNumber, this.imageDTO , "");
-        assertThrowsExactly(InvalidDataFromClientException.class, () -> this.clientService.create(createdClient));
+        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
     }
 
     @Test
@@ -144,35 +141,35 @@ public class ClientServiceTest {
     public void createClientInvalidDataFromClientExceptionWhenClientFirstNameIsInvalid() {
         ClientDTO createdClient = this.createClient("Daniel8000", this.lastName,
                 this.email, this.phoneNumber, this.imageDTO , this.password);
-        assertThrowsExactly(InvalidDataFromClientException.class, () -> this.clientService.create(createdClient));
+        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
     }
     @Test
     @DisplayName("Should throw a InvalidDataFromClientException client last name is invalid")
     public void createClientInvalidDataFromClientExceptionWhenClientLastNameIsInvalid() {
         ClientDTO createdClient = this.createClient(this.name, "Araujo 80@#",
                 this.email, this.phoneNumber, this.imageDTO , this.password);
-        assertThrowsExactly(InvalidDataFromClientException.class, () -> this.clientService.create(createdClient));
+        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
     }
     @Test
     @DisplayName("Should throw a InvalidDataFromClientException when client email is invalid")
     public void createClientInvalidDataFromClientExceptionWhenClientEmailIsInvalid() {
         ClientDTO createdClient = this.createClient(this.name, this.lastName,
                 "danielgmail.com", this.phoneNumber, this.imageDTO , this.password);
-        assertThrowsExactly(InvalidDataFromClientException.class, () -> this.clientService.create(createdClient));
+        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
     }
     @Test
     @DisplayName("Should throw a InvalidDataFromClientException when client phone number is invalid")
     public void createClientInvalidDataFromClientExceptionWhenClientPhoneNumberIsInvalid() {
         ClientDTO createdClient = this.createClient(this.name, this.lastName,
                 this.phoneNumber, "998319", this.imageDTO , this.password);
-        assertThrowsExactly(InvalidDataFromClientException.class, () -> this.clientService.create(createdClient));
+        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
     }
     @Test
     @DisplayName("Should throw a InvalidDataFromClientException when client password is invalid")
     public void createClientInvalidDataFromClientExceptionWhenClientPasswordIsInvalid() {
         ClientDTO createdClient = this.createClient(this.name, this.lastName,
                 this.phoneNumber, this.phoneNumber, this.imageDTO , "1234567");
-        assertThrowsExactly(InvalidDataFromClientException.class, () -> this.clientService.create(createdClient));
+        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
     }
 
 

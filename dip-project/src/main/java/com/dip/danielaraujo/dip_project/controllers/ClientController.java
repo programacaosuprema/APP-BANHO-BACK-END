@@ -1,6 +1,6 @@
 package com.dip.danielaraujo.dip_project.controllers;
 
-import com.dip.danielaraujo.dip_project.exceptions.InvalidDataFromClientException;
+import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class ClientController {
                 return ResponseEntity.notFound().build();
             }
 
-        } catch (InvalidDataFromClientException e) {
+        } catch (InvalidDataException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -61,7 +61,7 @@ public class ClientController {
                 return ResponseEntity.notFound().build();
             }
 
-        } catch (InvalidDataFromClientException e) {
+        } catch (InvalidDataException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
