@@ -1,5 +1,6 @@
 package com.dip.danielaraujo.dip_project.services;
 
+import com.dip.danielaraujo.dip_project.entities.AuthenticationEntity;
 import com.dip.danielaraujo.dip_project.exceptions.ClientNotFoundException;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
@@ -42,6 +43,20 @@ public class ClientServiceTest {
         assertEquals(createdClient.image().src(), this.imageDTO.src());
         assertEquals(createdClient.password(), password);
     }
+
+    @Test
+    @DisplayName("Should create a client with valid authentication")
+    public void createClientWithAuthenticationSuccess() {
+        ClientDTO createdClient = this.clientService.create(this.createClient(this.name, this.lastName,
+                this.email, this.phoneNumber, this.imageDTO , this.password));
+        assertEquals(createdClient.firstName(), this.name);
+
+        AuthenticationEntity auth = this.clientService.findAuthenticationByEmail(this.email);
+        assertNotNull(auth);
+        assertEquals(auth.getEmail(), this.email);
+        assertEquals(auth.getPassword(), this.password);
+    }
+
 
     @Test
     @DisplayName("Should create a client with a image in database and return just one client from database")

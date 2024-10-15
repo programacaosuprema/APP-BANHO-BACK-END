@@ -27,7 +27,7 @@ public class ClientEntity {
     @JoinColumn(name = "image_id")
     private ImageEntity image;
 
-    @OneToOne(mappedBy = "client", cascade = CascadeType.PERSIST, optional = false)
+    @OneToOne(cascade = CascadeType.PERSIST, mappedBy = "client")
     private AuthenticationEntity authentication;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)

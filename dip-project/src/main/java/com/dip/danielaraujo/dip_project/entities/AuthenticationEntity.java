@@ -3,8 +3,6 @@ package com.dip.danielaraujo.dip_project.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "authentication")
 @Getter
@@ -12,11 +10,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationEntity {
+
     @Id
+    @Column(name = "email", nullable = false)
     private String email;
     private String password;
 
     @OneToOne
-    @JoinColumn(name = "cliente_id")
+    @MapsId
+    @JoinColumn(name = "email", referencedColumnName = "email")
     private ClientEntity client;
 }

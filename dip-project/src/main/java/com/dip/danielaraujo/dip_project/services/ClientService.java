@@ -86,4 +86,8 @@ public class ClientService {
 
         return new ClientDTO(existingClient);
     }
+
+    public AuthenticationEntity findAuthenticationByEmail(String email) {
+        return authentication.findByEmail(email);
+    }
 }
