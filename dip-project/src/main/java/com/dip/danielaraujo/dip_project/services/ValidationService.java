@@ -11,6 +11,10 @@ public class ValidationService {
     private final String acceptJustLetters = " accepts just letters";
     private final String isInvalid = " is invalid";
 
+    public ValidationService(){
+
+    }
+
     public ValidationService(ClientDTO data){
         String str = "cannot be empty.";
         this.validateClientFirstName(data.firstName(), "The first name");

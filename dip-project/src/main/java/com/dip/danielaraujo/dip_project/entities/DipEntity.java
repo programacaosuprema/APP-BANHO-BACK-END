@@ -1,6 +1,7 @@
 package com.dip.danielaraujo.dip_project.entities;
 
 import com.dip.danielaraujo.dip_project.dtos.DipDTO;
+import com.dip.danielaraujo.dip_project.enums.AccessTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +26,7 @@ public class DipEntity {
     private String city;
     private BigDecimal temperature;
     @Enumerated(EnumType.STRING)
-    private AccessType access; // "PRIVATE" or "PUBLIC"
+    private AccessTypeEnum access; // "PRIVATE" or "PUBLIC"
     private String location;
 
     @ManyToOne
@@ -40,7 +41,7 @@ public class DipEntity {
         this.description = dip.description();
         this.state = dip.state();
         this.city = dip.city();
-        this.temperature = dip.tempeture();
+        this.temperature = dip.temperature();
         this.access = dip.access();
         this.location = dip.location();
     }

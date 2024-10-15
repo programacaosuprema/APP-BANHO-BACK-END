@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/dips")
@@ -17,32 +18,62 @@ public class DipController {
     private DipService dipService;
 
     @PostMapping
-    public ResponseEntity<DipDTO> createDip(@RequestBody DipDTO dipDTO) {
-        DipDTO newDip = dipService.create(dipDTO);
-        return new ResponseEntity<>(newDip, HttpStatus.CREATED);
+    public ResponseEntity<?> createDip(@RequestBody DipDTO dipDTO) {
+        try {
+            DipDTO newDip = dipService.create(dipDTO);
+            return new ResponseEntity<>(newDip, HttpStatus.CREATED);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DipDTO> getDipById(@PathVariable Long id) {
-        DipDTO dip = dipService.findById(id);
-        return ResponseEntity.ok(dip);
+    public ResponseEntity<?> getDipById(@PathVariable Long id) {
+        try{
+            DipDTO dip = dipService.findById(id);
+            return new ResponseEntity<>(dip, HttpStatus.FOUND);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<DipDTO>> getDipsByName(@RequestParam String name) {
-        List<DipDTO> dips = dipService.findByName(name);
-        return ResponseEntity.ok(dips);
+    public ResponseEntity<?> getDipsByName(@RequestParam String name) {
+        try {
+            List<DipDTO> dips = dipService.findByName(name);
+            if (!dips.isEmpty()) {
+                return ResponseEntity.ok(dips);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<DipDTO>> getAllDips() {
-        List<DipDTO> dips = dipService.findAll();
-        return ResponseEntity.ok(dips);
+    public ResponseEntity<?> getAllDips() {
+        try {
+            List<DipDTO> dips = dipService.findAll();
+            if (!dips.isEmpty()) {
+                return ResponseEntity.ok(dips);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DipDTO> updateDip(@PathVariable Long id, @RequestBody DipDTO dipDTO) {
-        DipDTO updatedDip = dipService.update(id, dipDTO);
-        return ResponseEntity.ok(updatedDip);
+    public ResponseEntity<?> updateDip(@PathVariable Long id, @RequestBody DipDTO dipDTO) {
+        try {
+            DipDTO updatedDip = dipService.update(id, dipDTO);
+            return ResponseEntity.ok(updatedDip);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

@@ -21,7 +21,7 @@ public class DipService {
     private ValidationService validate;
 
     public DipDTO create(DipDTO dipDTO) {
-        validate = new ValidationService(dipDTO);
+        this.validate = new ValidationService(dipDTO);
 
         DipEntity dip = new DipEntity(dipDTO);
 
@@ -58,7 +58,7 @@ public class DipService {
         existingDip.setDescription(dipDTO.description());
         existingDip.setState(dipDTO.state());
         existingDip.setCity(dipDTO.city());
-        existingDip.setTemperature(dipDTO.tempeture());
+        existingDip.setTemperature(dipDTO.temperature());
         existingDip.setAccess(dipDTO.access());
         existingDip.setLocation(dipDTO.location());
 

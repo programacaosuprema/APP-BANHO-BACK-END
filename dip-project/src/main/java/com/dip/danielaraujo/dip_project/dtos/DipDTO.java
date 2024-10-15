@@ -1,13 +1,13 @@
 package com.dip.danielaraujo.dip_project.dtos;
 
 import com.dip.danielaraujo.dip_project.entities.DipEntity;
-import com.dip.danielaraujo.dip_project.entities.ImageEntity;
+import com.dip.danielaraujo.dip_project.enums.AccessTypeEnum;
 import jakarta.persistence.AccessType;
 
 import java.math.BigDecimal;
 
 public record DipDTO(Long id, String name, String description, String state,
-                     String city, BigDecimal tempeture, AccessType access, String location) {
+                     String city, BigDecimal temperature, AccessTypeEnum access, String location) {
     public DipDTO(DipEntity dip){
         this(dip.getId(), dip.getName(), dip.getDescription(),
                 dip.getState(), dip.getCity(), dip.getTemperature(), dip.getAccess(), dip.getLocation());

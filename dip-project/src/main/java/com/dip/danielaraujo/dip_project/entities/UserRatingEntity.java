@@ -23,5 +23,5 @@ public class UserRatingEntity {
     @JoinColumn(name = "dip_id")
     private DipEntity dip;
 
-    private double numberOfStars; // Atributo extra
+    private double numberOfStars;
 }

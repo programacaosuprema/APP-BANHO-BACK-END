@@ -7,19 +7,19 @@ import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.entities.ClientEntity;
 import com.dip.danielaraujo.dip_project.repositories.ClientRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;;
 import java.util.List;
 import com.dip.danielaraujo.dip_project.repositories.AutheticationRepository;
+
 @Service
 public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-        @Autowired
-        private ValidationService validate;
+    @Autowired
+    private ValidationService validate;
 
     @Autowired
     private AutheticationRepository authentication;
@@ -62,17 +62,18 @@ public class ClientService {
 
     @Transactional
     public ClientDTO update(Long id, ClientDTO clientDTO) {
+        this.validate = new ValidationService(clientDTO);
+
         ClientEntity existingClient = clientRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
+                .orElseThrow(() -> new ClientNotFoundException("Cliente não encontrado"));
 
         if (!existingClient.getEmail().equals(clientDTO.email())) {
             this.authentication.delete(existingClient.getAuthentication());
 
             AuthenticationEntity newAuth = new AuthenticationEntity(clientDTO.email(), clientDTO.password(), existingClient);
-            existingClient.setAuthentication(newAuth);  // Atualiza a autenticação
+            existingClient.setAuthentication(newAuth);
         }
 
-        // Atualizar outros dados do cliente
         existingClient.setFirstName(clientDTO.firstName());
         existingClient.setLastName(clientDTO.lastName());
         existingClient.setPhoneNumber(clientDTO.phoneNumber());
