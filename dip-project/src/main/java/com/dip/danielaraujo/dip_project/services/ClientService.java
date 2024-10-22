@@ -68,10 +68,16 @@ public class ClientService {
                 .orElseThrow(() -> new ClientNotFoundException("Cliente não encontrado"));
 
         if (!existingClient.getEmail().equals(clientDTO.email())) {
-            this.authentication.delete(existingClient.getAuthentication());
-
-            AuthenticationEntity newAuth = new AuthenticationEntity(clientDTO.email(), clientDTO.password(), existingClient);
-            existingClient.setAuthentication(newAuth);
+            AuthenticationEntity existingAuth = existingClient.getAuthentication();
+            if (existingAuth != null) {
+                existingAuth.setEmail(clientDTO.email());
+                existingAuth.setPassword(clientDTO.password());
+            } else {
+                AuthenticationEntity newAuth = new AuthenticationEntity(clientDTO.email(), clientDTO.password(), existingClient);
+                existingClient.setAuthentication(newAuth);
+            }
+        } else {
+            existingClient.getAuthentication().setPassword(clientDTO.password());
         }
 
         existingClient.setFirstName(clientDTO.firstName());
@@ -86,6 +92,7 @@ public class ClientService {
 
         return new ClientDTO(existingClient);
     }
+
 
     public AuthenticationEntity findAuthenticationByEmail(String email) {
         return authentication.findByEmail(email);
