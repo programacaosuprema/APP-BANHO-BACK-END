@@ -20,6 +20,7 @@ public class ClientEntity {
 
     private String firstName;
     private String lastName;
+    @Column(unique = true, nullable = false)
     private String email;
     private String phoneNumber;
 
@@ -27,7 +28,7 @@ public class ClientEntity {
     @JoinColumn(name = "image_id")
     private ImageEntity image;
 
-    @OneToOne(cascade = CascadeType.PERSIST, mappedBy = "client")
+    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
     private AuthenticationEntity authentication;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)

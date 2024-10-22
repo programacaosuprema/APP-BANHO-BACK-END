@@ -7,18 +7,19 @@ import lombok.*;
 @Table(name = "authentication")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationEntity {
 
     @Id
-    @Column(name = "email", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String email;
     private String password;
 
     @OneToOne
-    @MapsId
-    @JoinColumn(name = "email", referencedColumnName = "email")
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
     private ClientEntity client;
 
     public AuthenticationEntity(String email, String password, ClientEntity client) {
