@@ -5,75 +5,94 @@ import com.dip.danielaraujo.dip_project.dtos.DipDTO;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 @Service
 public class ValidationService {
-    private final String cannotBeEmpty = " cannot be empty.";
-    private final String acceptJustLetters = " accepts just letters";
-    private final String isInvalid = " is invalid";
+    private static final String CANNOT_BE_EMPTY = " cannot be empty.";
+    private static final String IS_INVALID = " is invalid.";
+    private static final String ACCEPTS_JUST_LETTERS = " accepts just letters.";
 
-    public ValidationService(){
+    private static final Pattern EMAIL_REGEX = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+    private static final Pattern PHONE_NUMBER_REGEX = Pattern.compile("^[0-9]{11}$");
+    private static final Pattern PASSWORD_REGEX = Pattern.compile("^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-]).{8,12}$");
+    private static final Pattern LETTERS_ONLY_REGEX = Pattern.compile("^[\\p{L} ]+$");
 
+    private static final Set<String> VALID_STATES = new HashSet<>(Arrays.asList(
+            "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MG", "MS", "MT",
+            "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO"
+    ));
+
+    public ValidationService() {
     }
 
-    public ValidationService(ClientDTO data){
-        String str = "cannot be empty.";
-        this.validateClientFirstName(data.firstName(), "The first name");
-        this.validateClientLastName(data.lastName(), "The last name");
-        this.validadeClientEmail(data.email(), "The email");
-        this.validadeClientPhoneNumber(data.phoneNumber(), "The phone number");
-        this.validadeClientPassword(data.password(), "The password");
+    public ValidationService(ClientDTO data) {
+        validateClient(data);
     }
 
-    public ValidationService(DipDTO data){
-        String str = "cannot be empty.";
-        this.validateDipName(data.name(), "The name");
+    public ValidationService(DipDTO data) {
+        validateDip(data);
     }
 
-    private void validateClientFirstName(String name, String expression){
-        if (name.isBlank()){
-            throw new InvalidDataException(expression + this.cannotBeEmpty);
-        }else if (!(this.cotainOnlyLetters(name))){
-            throw new InvalidDataException(expression + this.acceptJustLetters);
+    public void validateClient(ClientDTO data) {
+        validateNotEmpty(data.firstName(), "The first name");
+        validateOnlyLetters(data.firstName(), "The first name");
+
+        validateNotEmpty(data.lastName(), "The last name");
+        validateOnlyLetters(data.lastName(), "The last name");
+
+        validateNotEmpty(data.email(), "The email");
+        validateEmail(data.email());
+
+        validateNotEmpty(data.phoneNumber(), "The phone number");
+        validatePhoneNumber(data.phoneNumber());
+
+        validateNotEmpty(data.password(), "The password");
+        validatePassword(data.password());
+    }
+    public void validateDip(DipDTO data) {
+        validateNotEmpty(data.name(), "The name");
+        validateOnlyLetters(data.name(), "The name");
+
+        validateState(data.state());
+    }
+
+    private void validateNotEmpty(String value, String field) {
+        if (value == null || value.isBlank()) {
+            throw new InvalidDataException(field + CANNOT_BE_EMPTY);
         }
     }
 
-    private void validateClientLastName(String lastName, String expression){
-        this.validateClientFirstName(lastName, expression);
-    }
-
-    private void validadeClientEmail(String email, String expression){
-        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
-        if (email.isBlank()){
-            throw new InvalidDataException(expression + this.cannotBeEmpty);
-        }else if (!email.matches(emailRegex)){
-            throw new InvalidDataException(expression + this.isInvalid);
+    private void validateOnlyLetters(String value, String field) {
+        if (!LETTERS_ONLY_REGEX.matcher(value).matches()) {
+            throw new InvalidDataException(field + ACCEPTS_JUST_LETTERS);
         }
     }
 
-    private void validadeClientPhoneNumber(String phoneNumber, String expression){
-        String phoneNumberRegex = "^[0-9]{11}$";
-        if (phoneNumber.isBlank()){
-            throw new InvalidDataException(expression + this.cannotBeEmpty);
-        }else if (!phoneNumber.matches(phoneNumberRegex)){
-            throw new InvalidDataException(expression + this.isInvalid);
+    private void validateEmail(String email) {
+        if (!EMAIL_REGEX.matcher(email).matches()) {
+            throw new InvalidDataException("The email" + IS_INVALID);
         }
     }
 
-    private void validadeClientPassword(String password, String expression){
-        String passWordRegex = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-]).{8,12}$";
-        if (password.isBlank()){
-            throw new InvalidDataException(expression + this.cannotBeEmpty);
-        }else if (!password.matches(passWordRegex)){
-            throw new InvalidDataException(expression + this.isInvalid);
+    private void validatePhoneNumber(String phoneNumber) {
+        if (!PHONE_NUMBER_REGEX.matcher(phoneNumber).matches()) {
+            throw new InvalidDataException("The phone number" + IS_INVALID);
         }
     }
 
-    private boolean cotainOnlyLetters(String data){
-        return data.matches("^[\\p{L} ]+$");
+    private void validatePassword(String password) {
+        if (!PASSWORD_REGEX.matcher(password).matches()) {
+            throw new InvalidDataException("The password" + IS_INVALID);
+        }
     }
 
-    private void validateDipName(String dipName, String expression){
-        this.validateClientFirstName(dipName, expression);
+    private void validateState(String state) {
+        if (!VALID_STATES.contains(state)) {
+            throw new InvalidDataException("The state" + IS_INVALID);
+        }
     }
-
 }

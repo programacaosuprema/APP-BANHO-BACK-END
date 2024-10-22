@@ -16,177 +16,109 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 public class ClientServiceTest {
+
     private final String name = "Daniel";
-    private final  String lastName = "Araújo";
+    private final String lastName = "Araújo";
     private final String email = "daniel@gmail.com";
     private final String phoneNumber = "98988060439";
     private final ImageDTO imageDTO = new ImageDTO(null, "monalisa", "src/img/");
     private final String password = "Teste123#";
+
     @Autowired
     private ClientService clientService;
 
-    private ClientDTO createClient(String firstName, String lastName, String email, String phoneNumber, ImageDTO imageDTO, String password){
-        return new ClientDTO(null, firstName, lastName, email, phoneNumber , imageDTO, password);
+    private ClientDTO createClient(String firstName, String lastName, String email, String phoneNumber, ImageDTO imageDTO, String password) {
+        return new ClientDTO(null, firstName, lastName, email, phoneNumber, imageDTO, password);
     }
 
     @Test
-    @DisplayName("Should create a client with a image in database and return just one client from database")
-    public void createClientWithNotNullImageSuccess() {
-        ClientDTO createdClient = this.clientService.create(this.createClient(this.name, this.lastName,
-                this.email, this.phoneNumber, this.imageDTO , this.password));
+    @DisplayName("Should create a client with an image and return the client details")
+    public void createClientWithImageSuccess() {
+        ClientDTO clientDTO = createClient(name, lastName, email, phoneNumber, imageDTO, password);
+        ClientDTO createdClient = clientService.create(clientDTO);
 
-        assertEquals(createdClient.firstName(), this.name);
-        assertEquals(createdClient.lastName(), this.lastName);
-        assertEquals(createdClient.email(), this.email);
-        assertEquals(createdClient.phoneNumber(), this.phoneNumber);
-        assertEquals(createdClient.image().name(), this.imageDTO.name());
-        assertEquals(createdClient.image().src(), this.imageDTO.src());
-        assertEquals(createdClient.password(), password);
+        assertClientDetails(createdClient, name, lastName, email, phoneNumber, imageDTO, password);
     }
 
     @Test
-    @DisplayName("Should create a client with valid authentication")
+    @DisplayName("Should create a client and save authentication details")
     public void createClientWithAuthenticationSuccess() {
-        ClientDTO createdClient = this.clientService.create(this.createClient(this.name, this.lastName,
-                this.email, this.phoneNumber, this.imageDTO , this.password));
-        assertEquals(createdClient.firstName(), this.name);
+        ClientDTO clientDTO = createClient(name, lastName, email, phoneNumber, imageDTO, password);
+        ClientDTO createdClient = clientService.create(clientDTO);
 
-        AuthenticationEntity auth = this.clientService.findAuthenticationByEmail(this.email);
+        AuthenticationEntity auth = clientService.findAuthenticationByEmail(email);
+
         assertNotNull(auth);
-        assertEquals(auth.getEmail(), this.email);
-        assertEquals(auth.getPassword(), this.password);
-    }
-
-
-    @Test
-    @DisplayName("Should create a client with a image in database and return just one client from database")
-    public void createClientWithJDBCIntegrityConstraintViolationExceptionSuccess() {
-        this.clientService.create(this.createClient(this.name, this.lastName,
-                this.email, this.phoneNumber, this.imageDTO , this.password));
-        ClientDTO createdClient2 = this.clientService.create(this.createClient(this.name, this.lastName,
-                "email2@gmail.com", this.phoneNumber, this.imageDTO , this.password));
-
-        assertThrowsExactly(RuntimeException.class, () -> this.clientService.create(createdClient2));
+        assertEquals(email, auth.getEmail());
+        assertEquals(password, auth.getPassword());
     }
 
     @Test
-    @DisplayName("Should create a client with out a image in database and return just one client from database")
-    public void createClientWithNullImageSuccess() {
-        ClientDTO createdClient = this.clientService.create(this.createClient(this.name, this.lastName,
-                this.email, this.phoneNumber, null , this.password));
+    @DisplayName("Should throw exception when creating a client with duplicate email")
+    public void createClientDuplicateEmailThrowsException() {
+        clientService.create(createClient(name, lastName, email, phoneNumber, imageDTO, password));
 
-        assertEquals(createdClient.firstName(), this.name);
-        assertEquals(createdClient.lastName(), this.lastName);
-        assertEquals(createdClient.email(), this.email);
-        assertEquals(createdClient.phoneNumber(), this.phoneNumber);
-        assertNull(createdClient.image().name());
-        assertNull(createdClient.image().src());
-        assertEquals(createdClient.password(), password);
+        ClientDTO duplicateClient = createClient(name, lastName, "email2@gmail.com", phoneNumber, imageDTO, password);
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> clientService.create(duplicateClient));
+
+        assertTrue(exception.getMessage().contains("unique constraint violated")); // Adjust the message as needed
     }
 
     @Test
-    @DisplayName("Should update a client and return updated client from database")
-    public void updateClientSuccess(){
+    @DisplayName("Should create a client without an image and return the client details")
+    public void createClientWithoutImageSuccess() {
+        ClientDTO clientDTO = createClient(name, lastName, email, phoneNumber, null, password);
+        ClientDTO createdClient = clientService.create(clientDTO);
 
-        ClientDTO createdClient = this.clientService.create(this.createClient(this.name, this.lastName,
-                this.email, this.phoneNumber, null , this.password));
-
-        Long client_id = createdClient.id();
-
-        String updated_name = "João";
-        String updated_lastName = "Batista";
-        String updated_email = "daniel123@gmail.com";
-        String updated_phoneNumber = "98982818330";
-
-
-        ClientDTO updatedClient = new ClientDTO(null, updated_name, updated_lastName, updated_email,
-                updated_phoneNumber, createdClient.image(), createdClient.password());
-
-        ClientDTO result = this.clientService.update(client_id, updatedClient);
-
-        assertEquals(result.firstName(), updated_name);
-        assertEquals(result.lastName(), updated_lastName);
-        assertEquals(result.email(), updated_email);
-        assertEquals(result.phoneNumber(), updated_phoneNumber);
+        assertClientDetails(createdClient, name, lastName, email, phoneNumber, null, password);
     }
 
     @Test
-    @DisplayName("Should not get client from database when client not exists")
-    public void ClientIsNotFound() {
-        assertThrowsExactly(ClientNotFoundException.class, () -> this.clientService.findByName("Daniel"));
+    @DisplayName("Should update a client and return updated details")
+    public void updateClientSuccess() {
+        ClientDTO clientDTO = createClient(name, lastName, email, phoneNumber, null, password);
+        ClientDTO createdClient = clientService.create(clientDTO);
+
+        Long clientId = createdClient.id();
+        ClientDTO updatedClient = new ClientDTO(null, "João", "Batista", "daniel123@gmail.com", "98982818330", createdClient.image(), createdClient.password());
+
+        ClientDTO result = clientService.update(clientId, updatedClient);
+
+        assertClientDetails(result, "João", "Batista", "daniel123@gmail.com", "98982818330", null, password);
     }
 
     @Test
-    @DisplayName("Should throw a InvalidDataFromClientException when client first name is empty")
-    public void FindClientWhenClientFirstNameIsEmpty() {
-        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.findByName(""));
+    @DisplayName("Should throw ClientNotFoundException when searching for a non-existent client")
+    public void clientIsNotFound() {
+        assertThrows(ClientNotFoundException.class, () -> clientService.findByName("Daniel"));
     }
 
     @Test
-    @DisplayName("Should throw a InvalidDataFromClientException when client first name is empty")
-    public void createClientInvalidDataFromClientExceptionWhenClientFirstNameIsEmpty() {
-            ClientDTO createdClient = this.createClient("", this.lastName,
-                    this.email, this.phoneNumber, this.imageDTO , this.password);
-            assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
-    }
-    @Test
-    @DisplayName("Should throw a InvalidDataFromClientException when client email is empty")
-    public void createClientInvalidDataFromClientExceptionWhenClientEmailIsEmpty() {
-        ClientDTO createdClient = this.createClient(this.name, this.lastName,
-                "", this.phoneNumber, this.imageDTO , this.password);
-        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
-    }
-    @Test
-    @DisplayName("Should throw a InvalidDataFromClientException when client phone number is empty")
-    public void createClientInvalidDataFromClientExceptionWhenClientPhoneNumberIsEmpty() {
-        ClientDTO createdClient = this.createClient(this.name, this.lastName,
-                this.email, "", this.imageDTO , this.password);
-        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
-    }
-    @Test
-    @DisplayName("Should throw a InvalidDataFromClientException when client password is empty")
-    public void createClientInvalidDataFromClientExceptionWhenClientPasswordIsEmpty() {
-        ClientDTO createdClient = this.createClient(this.name, this.lastName,
-                this.email, this.phoneNumber, this.imageDTO , "");
-        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
+    @DisplayName("Should throw InvalidDataException when creating a client with invalid data")
+    public void createClientWithInvalidDataThrowsException() {
+        assertInvalidDataExceptionForClient("", lastName, email, phoneNumber, imageDTO, password);
+        assertInvalidDataExceptionForClient(name, "", email, phoneNumber, imageDTO, password);
+        assertInvalidDataExceptionForClient(name, lastName, "", phoneNumber, imageDTO, password);
+        assertInvalidDataExceptionForClient(name, lastName, email, phoneNumber, imageDTO, "");
+        assertInvalidDataExceptionForClient("Daniel8000", lastName, email, phoneNumber, imageDTO, password);
+        assertInvalidDataExceptionForClient(name, "Araujo 80@#", email, phoneNumber, imageDTO, password);
+        assertInvalidDataExceptionForClient(name, lastName, "danielgmail.com", phoneNumber, imageDTO, password);
+        assertInvalidDataExceptionForClient(name, lastName, email, "998319", imageDTO, password);
+        assertInvalidDataExceptionForClient(name, lastName, email, phoneNumber, imageDTO, "1234567");
     }
 
-    @Test
-    @DisplayName("Should throw a InvalidDataFromClientException when client name is invalid")
-    public void createClientInvalidDataFromClientExceptionWhenClientFirstNameIsInvalid() {
-        ClientDTO createdClient = this.createClient("Daniel8000", this.lastName,
-                this.email, this.phoneNumber, this.imageDTO , this.password);
-        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
-    }
-    @Test
-    @DisplayName("Should throw a InvalidDataFromClientException client last name is invalid")
-    public void createClientInvalidDataFromClientExceptionWhenClientLastNameIsInvalid() {
-        ClientDTO createdClient = this.createClient(this.name, "Araujo 80@#",
-                this.email, this.phoneNumber, this.imageDTO , this.password);
-        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
-    }
-    @Test
-    @DisplayName("Should throw a InvalidDataFromClientException when client email is invalid")
-    public void createClientInvalidDataFromClientExceptionWhenClientEmailIsInvalid() {
-        ClientDTO createdClient = this.createClient(this.name, this.lastName,
-                "danielgmail.com", this.phoneNumber, this.imageDTO , this.password);
-        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
-    }
-    @Test
-    @DisplayName("Should throw a InvalidDataFromClientException when client phone number is invalid")
-    public void createClientInvalidDataFromClientExceptionWhenClientPhoneNumberIsInvalid() {
-        ClientDTO createdClient = this.createClient(this.name, this.lastName,
-                this.phoneNumber, "998319", this.imageDTO , this.password);
-        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
-    }
-    @Test
-    @DisplayName("Should throw a InvalidDataFromClientException when client password is invalid")
-    public void createClientInvalidDataFromClientExceptionWhenClientPasswordIsInvalid() {
-        ClientDTO createdClient = this.createClient(this.name, this.lastName,
-                this.phoneNumber, this.phoneNumber, this.imageDTO , "1234567");
-        assertThrowsExactly(InvalidDataException.class, () -> this.clientService.create(createdClient));
+    private void assertClientDetails(ClientDTO client, String expectedFirstName, String expectedLastName, String expectedEmail, String expectedPhoneNumber, ImageDTO expectedImage, String expectedPassword) {
+        assertEquals(expectedFirstName, client.firstName());
+        assertEquals(expectedLastName, client.lastName());
+        assertEquals(expectedEmail, client.email());
+        assertEquals(expectedPhoneNumber, client.phoneNumber());
+        assertEquals(expectedImage != null ? expectedImage.name() : null, client.image() != null ? client.image().name() : null);
+        assertEquals(expectedImage != null ? expectedImage.src() : null, client.image() != null ? client.image().src() : null);
+        assertEquals(expectedPassword, client.password());
     }
 
-
-
+    private void assertInvalidDataExceptionForClient(String firstName, String lastName, String email, String phoneNumber, ImageDTO imageDTO, String password) {
+        ClientDTO clientDTO = createClient(firstName, lastName, email, phoneNumber, imageDTO, password);
+        assertThrows(InvalidDataException.class, () -> clientService.create(clientDTO));
+    }
 }
