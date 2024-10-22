@@ -45,4 +45,84 @@ public class DipEntity {
         this.access = dip.access();
         this.location = dip.location();
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public BigDecimal getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(BigDecimal temperature) {
+        this.temperature = temperature;
+    }
+
+    public AccessTypeEnum getAccess() {
+        return access;
+    }
+
+    public void setAccess(AccessTypeEnum access) {
+        this.access = access;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public OwnerEntity getOwner() {
+        return owner;
+    }
+
+    public void setOwner(OwnerEntity owner) {
+        this.owner = owner;
+    }
+
+    public List<UserRatingEntity> getUserRatings() {
+        return userRatings;
+    }
+
+    public void setUserRatings(List<UserRatingEntity> userRatings) {
+        this.userRatings = userRatings;
+    }
 }

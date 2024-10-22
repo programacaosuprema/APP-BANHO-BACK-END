@@ -24,4 +24,36 @@ public class UserRatingEntity {
     private DipEntity dip;
 
     private double numberOfStars;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public ClientEntity getClient() {
+        return client;
+    }
+
+    public void setClient(ClientEntity client) {
+        this.client = client;
+    }
+
+    public DipEntity getDip() {
+        return dip;
+    }
+
+    public void setDip(DipEntity dip) {
+        this.dip = dip;
+    }
+
+    public double getNumberOfStars() {
+        return numberOfStars;
+    }
+
+    public void setNumberOfStars(double numberOfStars) {
+        this.numberOfStars = numberOfStars;
+    }
 }
