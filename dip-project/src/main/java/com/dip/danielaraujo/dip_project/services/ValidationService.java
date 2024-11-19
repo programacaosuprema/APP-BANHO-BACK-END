@@ -39,6 +39,7 @@ public class ValidationService {
 
     public void validateClient(ClientDTO data) {
         validateNotEmpty(data.firstName(), "The first name");
+
         validateOnlyLetters(data.firstName(), "The first name");
 
         validateNotEmpty(data.lastName(), "The last name");
@@ -61,7 +62,7 @@ public class ValidationService {
     }
 
     private void validateNotEmpty(String value, String field) {
-        if (value == null || value.isBlank()) {
+        if (value == null || value.isEmpty()) {
             throw new InvalidDataException(field + CANNOT_BE_EMPTY);
         }
     }

@@ -36,9 +36,12 @@ public class DipEntity {
     @OneToMany(mappedBy = "dip", cascade = CascadeType.ALL)
     private List<UserRatingEntity> userRatings;
 
+    @OneToMany(mappedBy = "dip", cascade = CascadeType.ALL)
+    private List<ImageDipEntity> images;
+
     public DipEntity(DipDTO dip){
         this.name = dip.name();
-        this.description = dip.description();
+            this.description = dip.description();
         this.state = dip.state();
         this.city = dip.city();
         this.temperature = dip.temperature();
@@ -122,7 +125,7 @@ public class DipEntity {
         return userRatings;
     }
 
-    public void setUserRatings(List<UserRatingEntity> userRatings) {
-        this.userRatings = userRatings;
+    public List<ImageDipEntity> getImages() {
+        return images;
     }
 }

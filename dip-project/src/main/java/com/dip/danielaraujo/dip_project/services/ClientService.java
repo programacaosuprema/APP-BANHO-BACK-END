@@ -1,7 +1,8 @@
 package com.dip.danielaraujo.dip_project.services;
 
 import com.dip.danielaraujo.dip_project.entities.AuthenticationEntity;
-import com.dip.danielaraujo.dip_project.entities.ImageEntity;
+import com.dip.danielaraujo.dip_project.entities.ImageClientEntity;
+import com.dip.danielaraujo.dip_project.entities.ImageDipEntity;
 import com.dip.danielaraujo.dip_project.exceptions.ClientNotFoundException;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
@@ -85,7 +86,7 @@ public class ClientService {
         existingClient.setPhoneNumber(clientDTO.phoneNumber());
 
         if (clientDTO.image() != null) {
-            existingClient.setImage(new ImageEntity(clientDTO.image()));
+            existingClient.setImage(new ImageClientEntity(clientDTO.image()));
         }
 
         clientRepository.save(existingClient);

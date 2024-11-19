@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/dips")
+@CrossOrigin("*")
 public class DipController {
 
     @Autowired
@@ -38,30 +38,23 @@ public class DipController {
 
     }
 
-    @GetMapping("/search")
+    @GetMapping()
     public ResponseEntity<?> getDipsByName(@RequestParam String name) {
         try {
             List<DipDTO> dips = dipService.findByName(name);
-            if (!dips.isEmpty()) {
-                return ResponseEntity.ok(dips);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+
+            return ResponseEntity.ok(dips);
+
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAllDips() {
+    @GetMapping("/search")
+    public ResponseEntity<?> findAll() {
         try {
             List<DipDTO> dips = dipService.findAll();
-            if (!dips.isEmpty()) {
-                return ResponseEntity.ok(dips);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-
+            return ResponseEntity.ok(dips);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }

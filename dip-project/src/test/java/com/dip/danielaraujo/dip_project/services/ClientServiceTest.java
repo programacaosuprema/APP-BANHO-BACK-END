@@ -1,10 +1,11 @@
 package com.dip.danielaraujo.dip_project.services;
 
+import com.dip.danielaraujo.dip_project.dtos.ImageClientDTO;
 import com.dip.danielaraujo.dip_project.entities.AuthenticationEntity;
 import com.dip.danielaraujo.dip_project.exceptions.ClientNotFoundException;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
-import com.dip.danielaraujo.dip_project.dtos.ImageDTO;
+import com.dip.danielaraujo.dip_project.dtos.ImageDipDTO;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,13 +22,13 @@ public class ClientServiceTest {
     private final String lastName = "Araújo";
     private final String email = "daniel@gmail.com";
     private final String phoneNumber = "98988060439";
-    private final ImageDTO imageDTO = new ImageDTO(null, "monalisa", "src/img/");
+    private final ImageClientDTO imageDTO = new ImageClientDTO(null, "monalisa", "src/img/", "JPG");
     private final String password = "Teste123#";
 
     @Autowired
     private ClientService clientService;
 
-    private ClientDTO createClient(String firstName, String lastName, String email, String phoneNumber, ImageDTO imageDTO, String password) {
+    private ClientDTO createClient(String firstName, String lastName, String email, String phoneNumber, ImageDipDTO imageDTO, String password) {
         return new ClientDTO(null, firstName, lastName, email, phoneNumber, imageDTO, password);
     }
 
@@ -107,7 +108,7 @@ public class ClientServiceTest {
         assertInvalidDataExceptionForClient(name, lastName, email, phoneNumber, imageDTO, "1234567");
     }
 
-    private void assertClientDetails(ClientDTO client, String expectedFirstName, String expectedLastName, String expectedEmail, String expectedPhoneNumber, ImageDTO expectedImage, String expectedPassword) {
+    private void assertClientDetails(ClientDTO client, String expectedFirstName, String expectedLastName, String expectedEmail, String expectedPhoneNumber, ImageDipDTO expectedImage, String expectedPassword) {
         assertEquals(expectedFirstName, client.firstName());
         assertEquals(expectedLastName, client.lastName());
         assertEquals(expectedEmail, client.email());
@@ -117,7 +118,7 @@ public class ClientServiceTest {
         assertEquals(expectedPassword, client.password());
     }
 
-    private void assertInvalidDataExceptionForClient(String firstName, String lastName, String email, String phoneNumber, ImageDTO imageDTO, String password) {
+    private void assertInvalidDataExceptionForClient(String firstName, String lastName, String email, String phoneNumber, ImageDipDTO imageDTO, String password) {
         ClientDTO clientDTO = createClient(firstName, lastName, email, phoneNumber, imageDTO, password);
         assertThrows(InvalidDataException.class, () -> clientService.create(clientDTO));
     }

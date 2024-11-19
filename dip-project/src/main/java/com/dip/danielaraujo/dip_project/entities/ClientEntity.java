@@ -4,7 +4,6 @@ import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.awt.*;
 import java.util.List;
 
 @Entity
@@ -26,7 +25,7 @@ public class ClientEntity {
 
     @OneToOne(cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(name = "image_id")
-    private ImageEntity image;
+    private ImageClientEntity image;
 
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
     private AuthenticationEntity authentication;
@@ -39,7 +38,7 @@ public class ClientEntity {
         this.lastName = clientDTO.lastName();
         this.email = clientDTO.email();
         this.phoneNumber = clientDTO.phoneNumber();
-        this.image =  new ImageEntity(clientDTO.image());
+        this.image =  new ImageClientEntity(clientDTO.image());
         this.authentication = new AuthenticationEntity(clientDTO.email(), clientDTO.password(), this);
     }
 
@@ -83,11 +82,11 @@ public class ClientEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public ImageEntity getImage() {
+    public ImageClientEntity getImage() {
         return image;
     }
 
-    public void setImage(ImageEntity image) {
+    public void setImage(ImageClientEntity image) {
         this.image = image;
     }
 
