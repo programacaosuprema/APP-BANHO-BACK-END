@@ -1,6 +1,7 @@
 package com.dip.danielaraujo.dip_project.entities;
 
 import com.dip.danielaraujo.dip_project.dtos.DipDTO;
+import com.dip.danielaraujo.dip_project.dtos.ImageDipDTO;
 import com.dip.danielaraujo.dip_project.enums.AccessTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -18,7 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class DipEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String name;
@@ -42,12 +45,19 @@ public class DipEntity {
 
     public DipEntity(DipDTO dip){
         this.name = dip.name();
-            this.description = dip.description();
+        this.description = dip.description();
         this.state = dip.state();
         this.city = dip.city();
         this.temperature = dip.temperature();
-        this.access = dip.access();
+        //função que pega de string e transforma para tipo ENUM
+        if (dip.access().equals("PRIVADO")){
+            this.access = AccessTypeEnum.PRIVATE;
+        }else{
+            this.access = AccessTypeEnum.PUBLIC;
+        }
         this.location = dip.location();
+
+        this.images = dip.images().stream().map(ImageDipEntity::new).toList();
     }
 
     public UUID getId() {
@@ -94,8 +104,13 @@ public class DipEntity {
         this.temperature = temperature;
     }
 
-    public AccessTypeEnum getAccess() {
-        return access;
+    public String getAccess() {
+        //Serve para retornar a tradução para o usuário final
+        if (this.access.equals(AccessTypeEnum.PUBLIC)){
+            return "PÚBLICO";
+        }else{
+            return "PRIVADO";
+        }
     }
 
     public void setAccess(AccessTypeEnum access) {

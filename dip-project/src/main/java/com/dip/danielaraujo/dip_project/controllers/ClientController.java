@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/clients")
@@ -26,7 +27,7 @@ public class ClientController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> updateClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO) {
+    public ResponseEntity<?> updateClient(@PathVariable UUID id, @RequestBody ClientDTO clientDTO) {
         try {
             ClientDTO updatedClient = clientService.update(id, clientDTO);
             return ResponseEntity.ok(updatedClient);

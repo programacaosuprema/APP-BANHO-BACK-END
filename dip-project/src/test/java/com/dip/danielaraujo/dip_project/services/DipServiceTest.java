@@ -1,6 +1,10 @@
 package com.dip.danielaraujo.dip_project.services;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import com.dip.danielaraujo.dip_project.dtos.DipDTO;
+import com.dip.danielaraujo.dip_project.dtos.ImageDipDTO;
 import com.dip.danielaraujo.dip_project.entities.DipEntity;
 import com.dip.danielaraujo.dip_project.enums.AccessTypeEnum;
 import com.dip.danielaraujo.dip_project.exceptions.DipNotFoundException;
@@ -12,14 +16,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 public class DipServiceTest {
 
@@ -34,13 +33,26 @@ public class DipServiceTest {
 
     private DipDTO dipDTO;
     private DipEntity dipEntity;
+    private UUID dipId;  // Agora o id é do tipo UUID
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
+        // Criando imagens
+        ImageDipDTO image1 = new ImageDipDTO(UUID.randomUUID(), "dip1", "https://dip.com.br/src/images", "JPEG");
+        ImageDipDTO image2 = new ImageDipDTO(UUID.randomUUID(), "dip2", "https://dip.com.br/src/images", "PNG");
+
+        List<ImageDipDTO> images = new ArrayList<>() {{
+            add(image1);
+            add(image2);
+        }};
+
+        // Criando um UUID para o id
+        dipId = UUID.randomUUID();
+
         // Instanciando objetos de teste
-        dipDTO = new DipDTO(1L, "Dip Test", "Beautiful dip", "MA", "São Luís", new BigDecimal("25.0"), AccessTypeEnum.PUBLIC, "Some location");
+        this.dipDTO = new DipDTO(dipId, "Dip Test", "Beautiful dip", "MA", "São Luís", new BigDecimal("25.0"), "PRIVADO", "Some location", images);
         dipEntity = new DipEntity(dipDTO);
     }
 
@@ -48,7 +60,7 @@ public class DipServiceTest {
     public void testCreateDip() {
         when(dipRepository.save(any(DipEntity.class))).thenReturn(dipEntity);
 
-        // Aqui a validação será feita pelo construtor do ValidationService
+        // Criando o dip usando o UUID
         DipDTO result = dipService.create(dipDTO);
 
         assertNotNull(result);
@@ -56,36 +68,37 @@ public class DipServiceTest {
         assertEquals(dipDTO.description(), result.description());
 
         verify(dipRepository, times(1)).save(any(DipEntity.class));
-        // Não precisa mais do verify(validationService), pois a validação é feita no construtor
     }
 
     @Test
     public void testFindByIdSuccess() {
-        when(dipRepository.findById(1L)).thenReturn(Optional.of(dipEntity));
+        // Aqui usamos UUID para encontrar o dip
+        when(dipRepository.findById(any(UUID.class))).thenReturn(Optional.of(dipEntity));
 
-        DipDTO result = dipService.findById(1L);
+        // Passando UUID no método findById
+        DipDTO result = dipService.findById(dipId);
 
         assertNotNull(result);
         assertEquals(dipDTO.name(), result.name());
         assertEquals(dipDTO.description(), result.description());
 
-        verify(dipRepository, times(1)).findById(1L);
+        verify(dipRepository, times(1)).findById(any(UUID.class));
     }
 
     @Test
     public void testFindByIdNotFound() {
-        when(dipRepository.findById(1L)).thenReturn(Optional.empty());
+        when(dipRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(DipNotFoundException.class, () -> {
-            dipService.findById(1L);
+            dipService.findById(dipId);
         });
 
-        String expectedMessage = "Dip com ID 1 não encontrado";
+        String expectedMessage = "Dip com ID " + dipId + " não encontrado";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
 
-        verify(dipRepository, times(1)).findById(1L);
+        verify(dipRepository, times(1)).findById(any(UUID.class));
     }
 
     @Test
@@ -116,37 +129,52 @@ public class DipServiceTest {
 
     @Test
     public void testUpdateDipSuccess() {
-        when(dipRepository.findById(1L)).thenReturn(Optional.of(dipEntity));
+        when(dipRepository.findById(any(UUID.class))).thenReturn(Optional.of(dipEntity));
         when(dipRepository.save(any(DipEntity.class))).thenReturn(dipEntity);
 
-        DipDTO updatedDTO = new DipDTO(1L, "Updated Dip", "New description", "SP", "São Paulo", new BigDecimal("25.0"), AccessTypeEnum.PUBLIC, "New location");
-        DipDTO result = dipService.update(1L, updatedDTO);
+        ImageDipDTO image1 = new ImageDipDTO(UUID.randomUUID(), "dip_apdate1", "https://dip.com.br/src/images", "PNG");
+        ImageDipDTO image2 = new ImageDipDTO(UUID.randomUUID(), "dip_apdate2", "https://dip.com.br/src/images", "PNG");
+
+        List<ImageDipDTO> images = new ArrayList<>() {{
+            add(image1);
+            add(image2);
+        }};
+
+        // Criando um novo DipDTO com o mesmo ID para atualização
+        DipDTO updatedDTO = new DipDTO(dipId, "Updated Dip", "New description", "SP", "São Paulo", new BigDecimal("25.0"), "PÚBLICO", "New location", images);
+        DipDTO result = dipService.update(dipId, updatedDTO);
 
         assertNotNull(result);
         assertEquals(updatedDTO.name(), result.name());
         assertEquals(updatedDTO.description(), result.description());
 
-        verify(dipRepository, times(1)).findById(1L);
+        verify(dipRepository, times(1)).findById(any(UUID.class));
         verify(dipRepository, times(1)).save(any(DipEntity.class));
-        // A validação ocorre no construtor de ValidationService, então não precisa de verify aqui
     }
 
     @Test
     public void testUpdateDipNotFound() {
-        when(dipRepository.findById(1L)).thenReturn(Optional.empty());
+        when(dipRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
+        ImageDipDTO image1 = new ImageDipDTO(UUID.randomUUID(), "dip_apdate1", "https://dip.com.br/src/images", "PNG");
+        ImageDipDTO image2 = new ImageDipDTO(UUID.randomUUID(), "dip_apdate2", "https://dip.com.br/src/images", "PNG");
 
-        DipDTO updatedDTO = new DipDTO(1L, "Updated Dip", "New description", "SP", "São Paulo", new BigDecimal("25.0"), AccessTypeEnum.PUBLIC, "New location");
+        List<ImageDipDTO> images = new ArrayList<>() {{
+            add(image1);
+            add(image2);
+        }};
+
+        DipDTO updatedDTO = new DipDTO(dipId, "Updated Dip", "New description", "SP", "São Paulo", new BigDecimal("25.0"), "PÚBLICO", "New location", images);
 
         Exception exception = assertThrows(DipNotFoundException.class, () -> {
-            dipService.update(1L, updatedDTO);
+            dipService.update(dipId, updatedDTO);
         });
 
-        String expectedMessage = "Dip com ID 1 não encontrado";
+        String expectedMessage = "Dip com ID " + dipId + " não encontrado";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
 
-        verify(dipRepository, times(1)).findById(1L);
+        verify(dipRepository, times(1)).findById(any(UUID.class));
         verify(dipRepository, never()).save(any(DipEntity.class));
     }
 }

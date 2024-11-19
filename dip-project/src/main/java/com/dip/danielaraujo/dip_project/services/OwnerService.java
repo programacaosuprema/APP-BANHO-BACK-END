@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,7 +22,7 @@ public class OwnerService {
                 .collect(Collectors.toList());
     }
 
-    public OwnerDTO getOwnerById(Long id) {
+    public OwnerDTO getOwnerById(UUID id) {
         return new OwnerDTO(ownerRepository.findById(id).orElseThrow(() -> new ExpressionException("Owner not found")));
     }
 
@@ -29,7 +30,7 @@ public class OwnerService {
         return new OwnerDTO(ownerRepository.save(new OwnerEntity(owner)));
     }
 
-    public OwnerDTO updateOwner(Long id, OwnerDTO ownerDTO) {
+    public OwnerDTO updateOwner(UUID id, OwnerDTO ownerDTO) {
         OwnerEntity owner =  new OwnerEntity(getOwnerById(id));
         owner.setName(ownerDTO.name());
         owner.setContact(ownerDTO.contact());

@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -50,7 +51,7 @@ public class ClientControllerTest {
     @Test
     public void testCreateClientSuccess() throws Exception {
         // Ajuste para o ClientDTO record
-        ClientDTO clientDTO = new ClientDTO(1L, "John", "Doe", "john.doe@example.com", "555-1234", null, "password123");
+        ClientDTO clientDTO = new ClientDTO(UUID.randomUUID(), "John", "Doe", "john.doe@example.com", "555-1234", null, "password123");
 
         when(clientService.create(any(ClientDTO.class))).thenReturn(clientDTO);
 
@@ -69,7 +70,7 @@ public class ClientControllerTest {
     public void testCreateClientBadRequest() throws Exception {
         when(clientService.create(any(ClientDTO.class))).thenThrow(new RuntimeException("Error creating client"));
 
-        ClientDTO clientDTO = new ClientDTO(1L, "John", "Doe", "john.doe@example.com", "555-1234", null, "password123");
+        ClientDTO clientDTO = new ClientDTO(UUID.randomUUID(), "John", "Doe", "john.doe@example.com", "555-1234", null, "password123");
 
         mockMvc.perform(post("/clients")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -82,9 +83,10 @@ public class ClientControllerTest {
 
     @Test
     public void testUpdateClientSuccess() throws Exception {
-        ClientDTO clientDTO = new ClientDTO(1L, "John", "Doe", "john.doe@example.com", "555-1234", null, "newPassword");
+        UUID id = UUID.randomUUID();
+        ClientDTO clientDTO = new ClientDTO(id, "John", "Doe", "john.doe@example.com", "555-1234", null, "newPassword");
 
-        when(clientService.update(eq(1L), any(ClientDTO.class))).thenReturn(clientDTO);
+        when(clientService.update(eq(id), any(ClientDTO.class))).thenReturn(clientDTO);
 
         mockMvc.perform(put("/clients/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -95,14 +97,14 @@ public class ClientControllerTest {
                 .andExpect(jsonPath("$.email").value("john.doe@example.com"))
                 .andExpect(jsonPath("$.password").value("newPassword"));
 
-        verify(clientService, times(1)).update(eq(1L), any(ClientDTO.class));
+        verify(clientService, times(1)).update(eq(id), any(ClientDTO.class));
     }
 
     @Test
     public void testFindClientByNameSuccess() throws Exception {
         List<ClientDTO> clients = Arrays.asList(
-                new ClientDTO(1L, "John", "Doe", "john.doe@example.com", "555-1234", null, "password123"),
-                new ClientDTO(2L, "Jane", "Doe", "jane.doe@example.com", "555-4321", null, "password321")
+                new ClientDTO(UUID.randomUUID(), "John", "Doe", "john.doe@example.com", "555-1234", null, "password123"),
+                new ClientDTO(UUID.randomUUID(), "Jane", "Doe", "jane.doe@example.com", "555-4321", null, "password321")
         );
 
         when(clientService.findByName("Doe")).thenReturn(clients);
@@ -118,8 +120,8 @@ public class ClientControllerTest {
     @Test
     public void testFindAllClientsSuccess() throws Exception {
         List<ClientDTO> clients = Arrays.asList(
-                new ClientDTO(1L, "John", "Doe", "john.doe@example.com", "555-1234", null, "password123"),
-                new ClientDTO(2L, "Jane", "Doe", "jane.doe@example.com", "555-4321", null, "password321")
+                new ClientDTO(UUID.randomUUID(), "John", "Doe", "john.doe@example.com", "555-1234", null, "password123"),
+                new ClientDTO(UUID.randomUUID(), "Jane", "Doe", "jane.doe@example.com", "555-4321", null, "password321")
         );
 
         when(clientService.findAll()).thenReturn(clients);

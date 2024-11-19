@@ -12,6 +12,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;;
 import java.util.List;
+import java.util.UUID;
+
 import com.dip.danielaraujo.dip_project.repositories.AutheticationRepository;
 
 @Service
@@ -25,7 +27,7 @@ public class ClientService {
     @Autowired
     private AutheticationRepository authentication;
 
-    public ClientDTO findById(Long id){
+    public ClientDTO findById(UUID id){
         return new ClientDTO(this.clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Client not found")));
     }
 
@@ -62,7 +64,7 @@ public class ClientService {
     }
 
     @Transactional
-    public ClientDTO update(Long id, ClientDTO clientDTO) {
+    public ClientDTO update(UUID id, ClientDTO clientDTO) {
         this.validate = new ValidationService(clientDTO);
 
         ClientEntity existingClient = clientRepository.findById(id)

@@ -1,11 +1,11 @@
 package com.dip.danielaraujo.dip_project.controller;
 
+import com.dip.danielaraujo.dip_project.controllers.DipController;
 import com.dip.danielaraujo.dip_project.dtos.DipDTO;
-import com.dip.danielaraujo.dip_project.enums.AccessTypeEnum;
+import com.dip.danielaraujo.dip_project.dtos.ImageDipDTO;
 import com.dip.danielaraujo.dip_project.services.DipService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import com.dip.danielaraujo.dip_project.controllers.DipController;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +15,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -36,12 +37,26 @@ public class DipControllerTest {
     private ObjectMapper objectMapper;
 
     private DipDTO dipDTO;
+    private UUID dipId; // Declare UUID para ID
 
     @BeforeEach
     void setUp() {
-        this.dipDTO = new DipDTO(null, "Beautiful River", "A calm and beautiful river.",
-                "State", "City", new BigDecimal("25.5"), AccessTypeEnum.PUBLIC, "location");
+        // Inicializa o UUID para o dipId
+        dipId = UUID.randomUUID(); // Agora o ID é UUID
 
+        ImageDipDTO image1 = new ImageDipDTO(UUID.randomUUID(), "dip1", "https://dip.com.br/src/images", "JPEG");
+        ImageDipDTO image2 = new ImageDipDTO(UUID.randomUUID(), "dip2", "https://dip.com.br/src/images", "PNG");
+
+        List<ImageDipDTO> images = new ArrayList<>() {
+            {
+                add(image1);
+                add(image2);
+            }
+        };
+
+        // Agora o dipDTO é criado com o UUID dipId
+        this.dipDTO = new DipDTO(dipId, "Beautiful River", "A calm and beautiful river.",
+                "State", "City", new BigDecimal("25.5"), "PRIVADO", "location", images);
     }
 
     @Test
@@ -57,18 +72,20 @@ public class DipControllerTest {
 
     @Test
     void getDipById_ReturnsDip_WhenDipExists() throws Exception {
-        Mockito.when(dipService.findById(anyLong())).thenReturn(dipDTO);
+        // Alteração: Passando o UUID correto
+        Mockito.when(dipService.findById(any(UUID.class))).thenReturn(dipDTO);
 
-        mockMvc.perform(get("/dips/{id}", 1L))
+        mockMvc.perform(get("/dips/{id}", dipId)) // Usando o UUID
                 .andExpect(status().isFound())
                 .andExpect(jsonPath("$.name").value(dipDTO.name()));
     }
 
     @Test
     void getDipById_ReturnsBadRequest_WhenDipNotFound() throws Exception {
-        Mockito.when(dipService.findById(anyLong())).thenThrow(new RuntimeException("Dip not found"));
+        // Alteração: Passando o UUID correto
+        Mockito.when(dipService.findById(any(UUID.class))).thenThrow(new RuntimeException("Dip not found"));
 
-        mockMvc.perform(get("/dips/{id}", 1L))
+        mockMvc.perform(get("/dips/{id}", dipId)) // Usando o UUID
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Dip not found"));
     }
@@ -111,9 +128,9 @@ public class DipControllerTest {
 
     @Test
     void updateDip_ReturnsUpdatedDip_WhenDipIsUpdated() throws Exception {
-        Mockito.when(dipService.update(anyLong(), any(DipDTO.class))).thenReturn(dipDTO);
+        Mockito.when(dipService.update(any(UUID.class), any(DipDTO.class))).thenReturn(dipDTO);
 
-        mockMvc.perform(put("/dips/{id}", 1L)
+        mockMvc.perform(put("/dips/{id}", dipId) // Passando o UUID correto
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dipDTO)))
                 .andExpect(status().isOk())
@@ -122,9 +139,9 @@ public class DipControllerTest {
 
     @Test
     void updateDip_ReturnsBadRequest_WhenUpdateFails() throws Exception {
-        Mockito.when(dipService.update(anyLong(), any(DipDTO.class))).thenThrow(new RuntimeException("Dip update failed"));
+        Mockito.when(dipService.update(any(UUID.class), any(DipDTO.class))).thenThrow(new RuntimeException("Dip update failed"));
 
-        mockMvc.perform(put("/dips/{id}", 1L)
+        mockMvc.perform(put("/dips/{id}", dipId) // Passando o UUID correto
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dipDTO)))
                 .andExpect(status().isBadRequest())

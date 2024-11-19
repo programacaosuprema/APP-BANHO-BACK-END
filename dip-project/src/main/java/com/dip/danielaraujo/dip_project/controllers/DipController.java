@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/dips")
@@ -28,7 +29,7 @@ public class DipController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getDipById(@PathVariable Long id) {
+    public ResponseEntity<?> getDipById(@PathVariable UUID id) {
         try{
             DipDTO dip = dipService.findById(id);
             return new ResponseEntity<>(dip, HttpStatus.FOUND);
@@ -61,7 +62,7 @@ public class DipController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateDip(@PathVariable Long id, @RequestBody DipDTO dipDTO) {
+    public ResponseEntity<?> updateDip(@PathVariable UUID id, @RequestBody DipDTO dipDTO) {
         try {
             DipDTO updatedDip = dipService.update(id, dipDTO);
             return ResponseEntity.ok(updatedDip);
