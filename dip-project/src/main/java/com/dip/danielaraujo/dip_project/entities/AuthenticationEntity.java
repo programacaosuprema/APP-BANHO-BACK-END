@@ -3,6 +3,8 @@ package com.dip.danielaraujo.dip_project.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "authentication")
 @Getter
@@ -12,7 +14,7 @@ public class AuthenticationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Column(nullable = false)
     private String email;
@@ -26,6 +28,14 @@ public class AuthenticationEntity {
         this.email = email;
         this.password = password;
         this.client = client;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getEmail() {

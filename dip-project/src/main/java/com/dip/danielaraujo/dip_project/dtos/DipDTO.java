@@ -6,7 +6,7 @@ import com.dip.danielaraujo.dip_project.enums.AccessTypeEnum;
 import java.math.BigDecimal;
 import java.util.List;
 
-public record DipDTO(Long id, String name, String description, String state,
+public record DipDTO(UUID id, String name, String description, String state,
                      String city, BigDecimal temperature, AccessTypeEnum access, String location, List<ImageDipDTO> images) {
     public DipDTO(DipEntity dip){
         this(dip.getId(), dip.getName(), dip.getDescription(),

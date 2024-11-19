@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "client")
@@ -15,7 +16,7 @@ import java.util.List;
 public class ClientEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     private String firstName;
     private String lastName;
@@ -42,12 +43,8 @@ public class ClientEntity {
         this.authentication = new AuthenticationEntity(clientDTO.email(), clientDTO.password(), this);
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getFirstName() {

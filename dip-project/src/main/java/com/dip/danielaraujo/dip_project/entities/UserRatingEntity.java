@@ -3,6 +3,8 @@ package com.dip.danielaraujo.dip_project.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "user_rating")
 @Getter
@@ -13,7 +15,7 @@ public class UserRatingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -25,12 +27,12 @@ public class UserRatingEntity {
 
     private double numberOfStars;
 
-    public Long getId() {
-        return id;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public UUID getId() {
+        return id;
     }
 
     public ClientEntity getClient() {
