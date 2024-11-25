@@ -27,35 +27,4 @@ public class UserRatingEntity {
 
     private double numberOfStars;
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public ClientEntity getClient() {
-        return client;
-    }
-
-    public void setClient(ClientEntity client) {
-        this.client = client;
-    }
-
-    public DipEntity getDip() {
-        return dip;
-    }
-
-    public void setDip(DipEntity dip) {
-        this.dip = dip;
-    }
-
-    public double getNumberOfStars() {
-        return numberOfStars;
-    }
-
-    public void setNumberOfStars(double numberOfStars) {
-        this.numberOfStars = numberOfStars;
-    }
 }

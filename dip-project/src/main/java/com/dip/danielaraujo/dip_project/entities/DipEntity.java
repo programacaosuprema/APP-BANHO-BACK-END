@@ -49,95 +49,29 @@ public class DipEntity {
         this.state = dip.state();
         this.city = dip.city();
         this.temperature = dip.temperature();
-        //função que pega de string e transforma para tipo ENUM
-        if (dip.access().equals("PRIVADO")){
-            this.access = AccessTypeEnum.PRIVATE;
-        }else{
-            this.access = AccessTypeEnum.PUBLIC;
-        }
+        this.access = stringToAccessTypeEnum(dip.access());
         this.location = dip.location();
 
         this.images = dip.images().stream().map(ImageDipEntity::new).toList();
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public BigDecimal getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(BigDecimal temperature) {
-        this.temperature = temperature;
-    }
-
-    public String getAccess() {
-        //Serve para retornar a tradução para o usuário final
-        if (this.access.equals(AccessTypeEnum.PUBLIC)){
+    private String accessTypeEnumToString(AccessTypeEnum access){
+        if (access.equals(AccessTypeEnum.PUBLIC)) {
             return "PÚBLICO";
-        }else{
+        } else {
             return "PRIVADO";
         }
     }
 
-    public void setAccess(AccessTypeEnum access) {
-        this.access = access;
+    private AccessTypeEnum stringToAccessTypeEnum(String access){
+        if (access.equalsIgnoreCase("PRIVADO")){
+            return AccessTypeEnum.PRIVATE;
+        }else{
+            return AccessTypeEnum.PUBLIC;
+        }
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public OwnerEntity getOwner() {
-        return owner;
-    }
-
-    public void setOwner(OwnerEntity owner) {
-        this.owner = owner;
-    }
-
-    public List<UserRatingEntity> getUserRatings() {
-        return userRatings;
-    }
-
-    public List<ImageDipEntity> getImages() {
-        return images;
+    public String getStringAccess(){
+        return this.accessTypeEnumToString(this.access);
     }
 }

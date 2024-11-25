@@ -27,14 +27,19 @@ public class DipService {
 
         int imageSizeDip = dipDTO.images().size();
 
-        if (imageSizeDip != 0) {
+        if (imageSizeDip > 0 && imageSizeDip <= 5) {
 
             DipEntity dip = new DipEntity(dipDTO);
 
             DipEntity savedDip = dipRepository.save(dip);
             return new DipDTO(savedDip);
         }else{
-            throw new RuntimeException("Escolha pelo menos uma imagem!");
+            String frase = "";
+            if ( imageSizeDip == 0)
+                frase = "Escolha pelo menos uma imagem!";
+            else
+                frase = "Número de imagens acima do permitido!";
+            throw new RuntimeException(frase);
         }
 
     }

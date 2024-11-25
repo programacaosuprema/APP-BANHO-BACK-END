@@ -23,7 +23,7 @@ public class ClientServiceTest {
     private final String lastName = "Araújo";
     private final String email = "daniel@gmail.com";
     private final String phoneNumber = "98988060439";
-    private final ImageClientDTO imageDTO = new ImageClientDTO(null, "monalisa", "src/img/", "JPG");
+    private final ImageClientDTO imageClientDTO = new ImageClientDTO(null, "monalisa", "src/img/", "JPG");
     private final String password = "Teste123#";
 
     @Autowired
@@ -36,16 +36,16 @@ public class ClientServiceTest {
     @Test
     @DisplayName("Should create a client with an image and return the client details")
     public void createClientWithImageSuccess() {
-        ClientDTO clientDTO = createClient(name, lastName, email, phoneNumber, imageDTO, password);
+        ClientDTO clientDTO = createClient(name, lastName, email, phoneNumber, imageClientDTO, password);
         ClientDTO createdClient = clientService.create(clientDTO);
 
-        assertClientDetails(createdClient, name, lastName, email, phoneNumber, imageDTO);
+        assertClientDetails(createdClient, name, lastName, email, phoneNumber, imageClientDTO);
     }
 
     @Test
     @DisplayName("Should create a client and save authentication details")
     public void createClientWithAuthenticationSuccess() {
-        ClientDTO clientDTO = createClient(name, lastName, email, phoneNumber, imageDTO, password);
+        ClientDTO clientDTO = createClient(name, lastName, email, phoneNumber, imageClientDTO, password);
         ClientDTO createdClient = clientService.create(clientDTO);
 
         AuthenticationEntity auth = clientService.findAuthenticationByEmail(email);
@@ -58,12 +58,12 @@ public class ClientServiceTest {
     @Test
     @DisplayName("Should throw exception when creating a client with duplicate email")
     public void createClientDuplicateEmailThrowsException() {
-        clientService.create(createClient(name, lastName, email, phoneNumber, imageDTO, password));
+        clientService.create(createClient(name, lastName, email, phoneNumber, imageClientDTO, password));
 
-        ClientDTO duplicateClient = createClient(name, lastName, "email2@gmail.com", phoneNumber, imageDTO, password);
+        ClientDTO duplicateClient = createClient(name, lastName, email, phoneNumber, imageClientDTO, password);
         RuntimeException exception = assertThrows(RuntimeException.class, () -> clientService.create(duplicateClient));
 
-        assertTrue(exception.getMessage().contains("unique constraint violated")); // Adjust the message as needed
+        assertTrue(exception.getMessage().contains("Email já cadastrado")); // Adjust the message as needed
     }
 
     @Test
@@ -98,15 +98,15 @@ public class ClientServiceTest {
     @Test
     @DisplayName("Should throw InvalidDataException when creating a client with invalid data")
     public void createClientWithInvalidDataThrowsException() {
-        assertInvalidDataExceptionForClient("", lastName, email, phoneNumber, imageDTO, password);
-        assertInvalidDataExceptionForClient(name, "", email, phoneNumber, imageDTO, password);
-        assertInvalidDataExceptionForClient(name, lastName, "", phoneNumber, imageDTO, password);
-        assertInvalidDataExceptionForClient(name, lastName, email, phoneNumber, imageDTO, "");
-        assertInvalidDataExceptionForClient("Daniel8000", lastName, email, phoneNumber, imageDTO, password);
-        assertInvalidDataExceptionForClient(name, "Araujo 80@#", email, phoneNumber, imageDTO, password);
-        assertInvalidDataExceptionForClient(name, lastName, "danielgmail.com", phoneNumber, imageDTO, password);
-        assertInvalidDataExceptionForClient(name, lastName, email, "998319", imageDTO, password);
-        assertInvalidDataExceptionForClient(name, lastName, email, phoneNumber, imageDTO, "1234567");
+        assertInvalidDataExceptionForClient("", lastName, email, phoneNumber, imageClientDTO, password);
+        assertInvalidDataExceptionForClient(name, "", email, phoneNumber, imageClientDTO, password);
+        assertInvalidDataExceptionForClient(name, lastName, "", phoneNumber, imageClientDTO, password);
+        assertInvalidDataExceptionForClient(name, lastName, email, phoneNumber, imageClientDTO, "");
+        assertInvalidDataExceptionForClient("Daniel8000", lastName, email, phoneNumber, imageClientDTO, password);
+        assertInvalidDataExceptionForClient(name, "Araujo 80@#", email, phoneNumber, imageClientDTO, password);
+        assertInvalidDataExceptionForClient(name, lastName, "danielgmail.com", phoneNumber, imageClientDTO, password);
+        assertInvalidDataExceptionForClient(name, lastName, email, "998319", imageClientDTO, password);
+        assertInvalidDataExceptionForClient(name, lastName, email, phoneNumber, imageClientDTO, "1234567");
     }
 
     private void assertClientDetails(ClientDTO client, String expectedFirstName, String expectedLastName, String expectedEmail, String expectedPhoneNumber, ImageClientDTO expectedImage) {

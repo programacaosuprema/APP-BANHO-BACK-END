@@ -31,6 +31,9 @@ public class DipServiceTest {
     @InjectMocks
     private DipService dipService;
 
+    private final UUID id_image1 = UUID.randomUUID();
+    private final UUID id_image2 = UUID.randomUUID();
+
     private DipDTO dipDTO;
     private DipEntity dipEntity;
     private UUID dipId;  // Agora o id é do tipo UUID
@@ -40,8 +43,8 @@ public class DipServiceTest {
         MockitoAnnotations.openMocks(this);
 
         // Criando imagens
-        ImageDipDTO image1 = new ImageDipDTO(UUID.randomUUID(), "dip1", "https://dip.com.br/src/images", "JPEG");
-        ImageDipDTO image2 = new ImageDipDTO(UUID.randomUUID(), "dip2", "https://dip.com.br/src/images", "PNG");
+        ImageDipDTO image1 = new ImageDipDTO(id_image1, "dip1", "https://dip.com.br/src/images", "JPEG");
+        ImageDipDTO image2 = new ImageDipDTO(id_image2, "dip2", "https://dip.com.br/src/images", "PNG");
 
         List<ImageDipDTO> images = new ArrayList<>() {{
             add(image1);

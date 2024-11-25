@@ -24,8 +24,7 @@ public class ClientEntity {
     private String email;
     private String phoneNumber;
 
-    @OneToOne(cascade = CascadeType.PERSIST, optional = false)
-    @JoinColumn(name = "image_id")
+    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
     private ImageClientEntity image;
 
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
@@ -41,65 +40,5 @@ public class ClientEntity {
         this.phoneNumber = clientDTO.phoneNumber();
         this.image =  new ImageClientEntity(clientDTO.image());
         this.authentication = new AuthenticationEntity(clientDTO.email(), clientDTO.password(), this);
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public ImageClientEntity getImage() {
-        return image;
-    }
-
-    public void setImage(ImageClientEntity image) {
-        this.image = image;
-    }
-
-    public AuthenticationEntity getAuthentication() {
-        return authentication;
-    }
-
-    public void setAuthentication(AuthenticationEntity authentication) {
-        this.authentication = authentication;
-    }
-
-    public List<UserRatingEntity> getUserRatings() {
-        return userRatings;
-    }
-
-    public void setUserRatings(List<UserRatingEntity> userRatings) {
-        this.userRatings = userRatings;
     }
 }

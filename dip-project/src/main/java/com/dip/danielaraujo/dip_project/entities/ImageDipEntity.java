@@ -25,7 +25,7 @@ public class ImageDipEntity {
     @JoinColumn(name = "dip_id")
     private DipEntity dip;
 
-    public ImageDipEntity(ImageDipDTO imageDTO){
+    public ImageDipEntity(ImageDipDTO imageDTO) {
         if (imageDTO != null) {
             this.name = imageDTO.name();
             this.src = imageDTO.src();
@@ -33,37 +33,5 @@ public class ImageDipEntity {
             this.name = null;
             this.src = null;
         }
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSrc() {
-        return src;
-    }
-
-    public void setSrc(String src) {
-        this.src = src;
-    }
-
-    public String getFileType() {
-        return fileType;
-    }
-
-    public DipEntity getDip() {
-        return dip;
     }
 }

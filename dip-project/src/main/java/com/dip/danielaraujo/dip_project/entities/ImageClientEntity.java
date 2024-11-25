@@ -24,7 +24,8 @@ public class ImageClientEntity {
     @Column(name = "file_type")
     private String fileType;
 
-    @OneToOne(mappedBy = "image")
+    @OneToOne
+    @JoinColumn(name = "client_id")
     private ClientEntity client;
 
     public ImageClientEntity(ImageClientDTO imageDTO) {
@@ -35,41 +36,5 @@ public class ImageClientEntity {
             this.name = null;
             this.src = null;
         }
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSrc() {
-        return src;
-    }
-
-    public void setSrc(String src) {
-        this.src = src;
-    }
-
-    public ClientEntity getClient() {
-        return client;
-    }
-
-    public void setClient(ClientEntity client) {
-        this.client = client;
-    }
-
-    public String getFileType() {
-        return fileType;
     }
 }

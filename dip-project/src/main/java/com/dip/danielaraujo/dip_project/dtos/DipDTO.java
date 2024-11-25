@@ -11,7 +11,7 @@ public record DipDTO(UUID id, String name, String description, String state,
                      String city, BigDecimal temperature, String access, String location, List<ImageDipDTO> images) {
     public DipDTO(DipEntity dip){
         this(dip.getId(), dip.getName(), dip.getDescription(),
-                dip.getState(), dip.getCity(), dip.getTemperature(), dip.getAccess(), dip.getLocation(), dip.getImages().stream().map(ImageDipDTO::new).toList());
+                dip.getState(), dip.getCity(), dip.getTemperature(), dip.getStringAccess(), dip.getLocation(), dip.getImages().stream().map(ImageDipDTO::new).toList());
     }
 
     public static DipDTO fromEntity(DipEntity dip) {
