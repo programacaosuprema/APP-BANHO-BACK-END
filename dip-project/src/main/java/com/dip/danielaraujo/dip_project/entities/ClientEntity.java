@@ -38,7 +38,7 @@ public class ClientEntity {
         this.lastName = clientDTO.lastName();
         this.email = clientDTO.email();
         this.phoneNumber = clientDTO.phoneNumber();
-        this.image =  new ImageClientEntity(clientDTO.image());
+        this.image =  new ImageClientEntity(clientDTO.image(), this);
         this.authentication = new AuthenticationEntity(clientDTO.email(), clientDTO.password(), this);
     }
 }

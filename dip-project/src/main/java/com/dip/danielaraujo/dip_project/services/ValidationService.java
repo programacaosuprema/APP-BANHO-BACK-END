@@ -92,7 +92,7 @@ public class ValidationService {
     }
 
     private void validateState(String state) {
-        if (!VALID_STATES.contains(state)) {
+        if (!VALID_STATES.contains(state.toUpperCase())) {
             throw new InvalidDataException("The state" + IS_INVALID);
         }
     }

@@ -26,10 +26,16 @@ public class ClientController {
         }
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<?> updateClient(@PathVariable UUID id, @RequestBody ClientDTO clientDTO) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateClient(@PathVariable String id, @RequestBody ClientDTO clientDTO) {
         try {
-            ClientDTO updatedClient = clientService.update(id, clientDTO);
+            UUID uuid;
+            try {
+                uuid = UUID.fromString(id);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().body("UUID inválido");
+            }
+            ClientDTO updatedClient = clientService.update(uuid, clientDTO);
             return ResponseEntity.ok(updatedClient);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

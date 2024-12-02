@@ -88,7 +88,7 @@ public class ClientService {
         existingClient.setPhoneNumber(clientDTO.phoneNumber());
 
         if (clientDTO.image() != null) {
-            existingClient.setImage(new ImageClientEntity(clientDTO.image()));
+            existingClient.setImage(new ImageClientEntity(clientDTO.image(), existingClient));
         }
 
         clientRepository.save(existingClient);

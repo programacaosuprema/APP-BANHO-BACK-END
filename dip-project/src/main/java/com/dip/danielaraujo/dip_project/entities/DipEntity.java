@@ -51,9 +51,9 @@ public class DipEntity {
         this.temperature = dip.temperature();
         this.access = stringToAccessTypeEnum(dip.access());
         this.location = dip.location();
-
-        this.images = dip.images().stream().map(ImageDipEntity::new).toList();
+        this.images = dip.images().stream().map(dto -> new ImageDipEntity(dto, this)).toList();
     }
+
 
     private String accessTypeEnumToString(AccessTypeEnum access){
         if (access.equals(AccessTypeEnum.PUBLIC)) {

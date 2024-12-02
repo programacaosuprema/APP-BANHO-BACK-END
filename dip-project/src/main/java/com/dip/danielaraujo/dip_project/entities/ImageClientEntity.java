@@ -25,16 +25,19 @@ public class ImageClientEntity {
     private String fileType;
 
     @OneToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
     private ClientEntity client;
 
-    public ImageClientEntity(ImageClientDTO imageDTO) {
+    public ImageClientEntity(ImageClientDTO imageDTO, ClientEntity client) {
         if (imageDTO != null) {
             this.name = imageDTO.name();
             this.src = imageDTO.src();
+            this.fileType = imageDTO.filetype();
         } else {
             this.name = null;
             this.src = null;
+            this.fileType = null;
         }
+        this.client = client;
     }
 }

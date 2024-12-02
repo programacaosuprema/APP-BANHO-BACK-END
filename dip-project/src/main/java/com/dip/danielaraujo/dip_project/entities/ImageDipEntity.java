@@ -25,13 +25,16 @@ public class ImageDipEntity {
     @JoinColumn(name = "dip_id")
     private DipEntity dip;
 
-    public ImageDipEntity(ImageDipDTO imageDTO) {
+    public ImageDipEntity(ImageDipDTO imageDTO, DipEntity dip) {
         if (imageDTO != null) {
             this.name = imageDTO.name();
             this.src = imageDTO.src();
+            this.fileType = imageDTO.filetype();
         } else {
             this.name = null;
             this.src = null;
+            this.fileType = null;
         }
+        this.dip = dip;
     }
 }
