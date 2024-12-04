@@ -1,5 +1,6 @@
 package com.dip.danielaraujo.dip_project.services;
 
+import com.dip.danielaraujo.dip_project.dtos.AuthenticationDTO;
 import com.dip.danielaraujo.dip_project.dtos.ImageClientDTO;
 import com.dip.danielaraujo.dip_project.entities.AuthenticationEntity;
 import com.dip.danielaraujo.dip_project.exceptions.ClientNotFoundException;
@@ -50,7 +51,10 @@ public class ClientServiceTest {
 
         AuthenticationEntity auth = clientService.findAuthenticationByEmail(email);
 
+        AuthenticationDTO authenticationDTO = clientService.authentication(email, password);
+
         assertNotNull(auth);
+        assertNotNull(authenticationDTO.client_id());
         assertEquals(email, auth.getEmail());
         assertEquals(password, auth.getPassword());
     }

@@ -1,5 +1,6 @@
 package com.dip.danielaraujo.dip_project.controllers;
 
+import com.dip.danielaraujo.dip_project.dtos.AuthenticationDTO;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.services.ClientService;
@@ -21,6 +22,16 @@ public class ClientController {
         try {
             ClientDTO createdClient = clientService.create(clientDTO);
             return ResponseEntity.ok(createdClient);
+        } catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/authentication")
+    public ResponseEntity<?> autenticatioClient(@RequestBody AuthenticationDTO autenticationDTO) {
+        try {
+            AuthenticationDTO authentication = clientService.authentication(autenticationDTO.email(), autenticationDTO.password());
+            return ResponseEntity.ok(authentication);
         } catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }

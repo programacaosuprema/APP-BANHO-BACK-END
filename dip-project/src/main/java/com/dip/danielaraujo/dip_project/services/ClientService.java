@@ -1,5 +1,6 @@
 package com.dip.danielaraujo.dip_project.services;
 
+import com.dip.danielaraujo.dip_project.dtos.AuthenticationDTO;
 import com.dip.danielaraujo.dip_project.entities.AuthenticationEntity;
 import com.dip.danielaraujo.dip_project.entities.ImageClientEntity;
 import com.dip.danielaraujo.dip_project.entities.ImageDipEntity;
@@ -99,5 +100,9 @@ public class ClientService {
 
     public AuthenticationEntity findAuthenticationByEmail(String email) {
         return authentication.findByEmail(email);
+    }
+
+    public AuthenticationDTO authentication(String email, String password){
+        return new AuthenticationDTO(authentication.findByEmailAndPassword(email, password));
     }
 }
