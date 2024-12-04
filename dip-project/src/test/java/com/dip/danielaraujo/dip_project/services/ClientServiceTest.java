@@ -107,6 +107,8 @@ public class ClientServiceTest {
         assertInvalidDataExceptionForClient(name, lastName, "danielgmail.com", phoneNumber, imageClientDTO, password);
         assertInvalidDataExceptionForClient(name, lastName, email, "998319", imageClientDTO, password);
         assertInvalidDataExceptionForClient(name, lastName, email, phoneNumber, imageClientDTO, "1234567");
+        ImageClientDTO image = new ImageClientDTO(null, "monalisa", "src/img/", "PDF");
+        assertInvalidDataExceptionForClient(name, lastName, email, phoneNumber, image, password);
     }
 
     private void assertClientDetails(ClientDTO client, String expectedFirstName, String expectedLastName, String expectedEmail, String expectedPhoneNumber, ImageClientDTO expectedImage) {

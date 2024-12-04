@@ -2,11 +2,14 @@ package com.dip.danielaraujo.dip_project.services;
 
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.dtos.DipDTO;
+import com.dip.danielaraujo.dip_project.dtos.ImageClientDTO;
+import com.dip.danielaraujo.dip_project.enums.FileTypeEnum;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -26,15 +29,15 @@ public class ValidationService {
             "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO"
     ));
 
-    public ValidationService() {
-    }
-
     public ValidationService(ClientDTO data) {
         validateClient(data);
     }
 
     public ValidationService(DipDTO data) {
         validateDip(data);
+    }
+    public ValidationService() {
+
     }
 
     public void validateClient(ClientDTO data) {
@@ -53,12 +56,24 @@ public class ValidationService {
 
         validateNotEmpty(data.password(), "The password");
         validatePassword(data.password());
+        validateFileTypeImage(data.image(), "The images's file type");
     }
+
     public void validateDip(DipDTO data) {
         validateNotEmpty(data.name(), "The name");
         validateOnlyLetters(data.name(), "The name");
 
         validateState(data.state());
+    }
+
+    private void validateFileTypeImage(ImageClientDTO image, String field) {
+        if (image!=null) {
+            try {
+                FileTypeEnum.valueOf(image.filetype().toUpperCase());
+            } catch (Exception e) {
+                throw new InvalidDataException(field + IS_INVALID);
+            }
+        }
     }
 
     private void validateNotEmpty(String value, String field) {

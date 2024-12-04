@@ -25,7 +25,7 @@ public class ClientEntity {
     private String phoneNumber;
 
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
-    private ImageClientEntity image;
+    private ImageClientEntity image = null;
 
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
     private AuthenticationEntity authentication;
@@ -38,7 +38,9 @@ public class ClientEntity {
         this.lastName = clientDTO.lastName();
         this.email = clientDTO.email();
         this.phoneNumber = clientDTO.phoneNumber();
-        this.image =  new ImageClientEntity(clientDTO.image(), this);
+        if (clientDTO.image() != null) {
+            this.image = new ImageClientEntity(clientDTO.image(), this);
+        }
         this.authentication = new AuthenticationEntity(clientDTO.email(), clientDTO.password(), this);
     }
 }

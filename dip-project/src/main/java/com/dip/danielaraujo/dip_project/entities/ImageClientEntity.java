@@ -1,6 +1,7 @@
 package com.dip.danielaraujo.dip_project.entities;
 
 import com.dip.danielaraujo.dip_project.dtos.ImageClientDTO;
+import com.dip.danielaraujo.dip_project.enums.FileTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,22 +23,22 @@ public class ImageClientEntity {
     private String name;
     private String src;
     @Column(name = "file_type")
-    private String fileType;
+    @Enumerated(EnumType.STRING)
+    private FileTypeEnum fileType;
 
     @OneToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private ClientEntity client;
 
     public ImageClientEntity(ImageClientDTO imageDTO, ClientEntity client) {
-        if (imageDTO != null) {
-            this.name = imageDTO.name();
-            this.src = imageDTO.src();
-            this.fileType = imageDTO.filetype();
-        } else {
-            this.name = null;
-            this.src = null;
+        this.name = imageDTO.name();
+        this.src = imageDTO.src();
+        try {
+            this.fileType = FileTypeEnum.valueOf(imageDTO.filetype().toUpperCase());
+        }catch (Exception e){
             this.fileType = null;
         }
+
         this.client = client;
     }
 }
