@@ -24,25 +24,14 @@ public class DipService {
     private ValidationService validate;
 
     public DipDTO create(DipDTO dipDTO) {
+
         this.validate = new ValidationService(dipDTO);
 
-        int imageSizeDip = dipDTO.images().size();
+        DipEntity dip = new DipEntity(dipDTO);
 
-        if (imageSizeDip > 0 && imageSizeDip <= 5) {
+        DipEntity savedDip = dipRepository.save(dip);
 
-            DipEntity dip = new DipEntity(dipDTO);
-
-            DipEntity savedDip = dipRepository.save(dip);
-            return new DipDTO(savedDip);
-        }else{
-            String frase = "";
-            if ( imageSizeDip == 0)
-                frase = "Escolha pelo menos uma imagem!";
-            else
-                frase = "Número de imagens acima do permitido!";
-            throw new RuntimeException(frase);
-        }
-
+        return new DipDTO(savedDip);
     }
 
     @Transactional

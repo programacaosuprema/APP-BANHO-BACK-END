@@ -3,6 +3,8 @@ package com.dip.danielaraujo.dip_project.services;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.dtos.DipDTO;
 import com.dip.danielaraujo.dip_project.dtos.ImageClientDTO;
+import com.dip.danielaraujo.dip_project.dtos.ImageDipDTO;
+import com.dip.danielaraujo.dip_project.enums.AccessTypeEnum;
 import com.dip.danielaraujo.dip_project.enums.FileTypeEnum;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import org.springframework.stereotype.Service;
@@ -61,9 +63,10 @@ public class ValidationService {
 
     public void validateDip(DipDTO data) {
         validateNotEmpty(data.name(), "The name");
-        validateOnlyLetters(data.name(), "The name");
-
-        validateState(data.state());
+        validateStateFromDip(data.state());
+        validateImageSizeFromDip(data.images().size(), "The image size ");
+        validateAccessTypeFromDip(data.access(), "The access");
+        data.images().forEach(image -> this.validateFileTypeImage(image, "The images's file type"));
     }
 
     private void validateFileTypeImage(ImageClientDTO image, String field) {
@@ -73,6 +76,30 @@ public class ValidationService {
             } catch (Exception e) {
                 throw new InvalidDataException(field + IS_INVALID);
             }
+        }
+    }
+
+    private void validateFileTypeImage(ImageDipDTO image, String field) {
+        if (image!=null) {
+            try {
+                FileTypeEnum.valueOf(image.filetype().toUpperCase());
+            } catch (Exception e) {
+                throw new InvalidDataException(field + IS_INVALID);
+            }
+        }
+    }
+
+    private void validateImageSizeFromDip(int size, String field){
+        if (size == 0){
+            throw new InvalidDataException(field + CANNOT_BE_EMPTY);
+        }else if (size > 5){
+            throw new InvalidDataException(field + "cannot be above five");
+        }
+    }
+
+    private void validateAccessTypeFromDip(String access, String field){
+        if (!access.equalsIgnoreCase("PRIVADO") && !access.equalsIgnoreCase("PÚBLICO")){
+            throw new InvalidDataException(field + IS_INVALID);
         }
     }
 
@@ -106,7 +133,7 @@ public class ValidationService {
         }
     }
 
-    private void validateState(String state) {
+    private void validateStateFromDip(String state) {
         if (!VALID_STATES.contains(state.toUpperCase())) {
             throw new InvalidDataException("The state" + IS_INVALID);
         }

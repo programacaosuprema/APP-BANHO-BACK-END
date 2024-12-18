@@ -66,7 +66,7 @@ public class DipEntity {
     private AccessTypeEnum stringToAccessTypeEnum(String access){
         if (access.equalsIgnoreCase("PRIVADO")){
             return AccessTypeEnum.PRIVATE;
-        }else{
+        }else {
             return AccessTypeEnum.PUBLIC;
         }
     }
