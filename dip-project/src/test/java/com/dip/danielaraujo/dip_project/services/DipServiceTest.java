@@ -6,7 +6,6 @@ import static org.mockito.Mockito.*;
 import com.dip.danielaraujo.dip_project.dtos.DipDTO;
 import com.dip.danielaraujo.dip_project.dtos.ImageDipDTO;
 import com.dip.danielaraujo.dip_project.entities.DipEntity;
-import com.dip.danielaraujo.dip_project.enums.AccessTypeEnum;
 import com.dip.danielaraujo.dip_project.exceptions.DipNotFoundException;
 import com.dip.danielaraujo.dip_project.repositories.DipRepository;
 import org.junit.jupiter.api.BeforeEach;

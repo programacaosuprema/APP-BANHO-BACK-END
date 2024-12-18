@@ -9,10 +9,7 @@ import com.dip.danielaraujo.dip_project.enums.FileTypeEnum;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Service
@@ -64,9 +61,9 @@ public class ValidationService {
     public void validateDip(DipDTO data) {
         validateNotEmpty(data.name(), "The name");
         validateStateFromDip(data.state());
-        validateImageSizeFromDip(data.images().size(), "The image size ");
         validateAccessTypeFromDip(data.access(), "The access");
-        data.images().forEach(image -> this.validateFileTypeImage(image, "The images's file type"));
+        validateFileTypeImage(data.images(), "The images's file type");
+        validateImageSizeFromDip(data.images().size(), "The image size ");
     }
 
     private void validateFileTypeImage(ImageClientDTO image, String field) {
@@ -79,13 +76,18 @@ public class ValidationService {
         }
     }
 
-    private void validateFileTypeImage(ImageDipDTO image, String field) {
-        if (image!=null) {
-            try {
-                FileTypeEnum.valueOf(image.filetype().toUpperCase());
-            } catch (Exception e) {
-                throw new InvalidDataException(field + IS_INVALID);
+    private void validateFileTypeImage(List<ImageDipDTO> images, String field) {
+        if (images != null) {
+            for (ImageDipDTO image : images) {
+                try {
+                    FileTypeEnum.valueOf(image.filetype().toUpperCase());
+                } catch (Exception e) {
+                    throw new InvalidDataException(field + IS_INVALID);
+                }
+
             }
+        } else {
+            throw new InvalidDataException("The image cannot be null");
         }
     }
 
