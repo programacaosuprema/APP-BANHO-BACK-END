@@ -4,10 +4,10 @@ import com.dip.danielaraujo.dip_project.entities.AuthenticationEntity;
 
 import java.util.UUID;
 
-public record AuthenticationDTO(UUID id, String email, String password, UUID client_id) {
+public record AuthenticationDTO(String login, String password) {
 
     public AuthenticationDTO(AuthenticationEntity authentication) {
-        this(authentication.getId(), authentication.getEmail(), authentication.getPassword(), authentication.getClient().getId());
+        this(authentication.getEmail(), authentication.getPassword());
     }
 
     public static AuthenticationDTO fromEntity(AuthenticationEntity authentication) {

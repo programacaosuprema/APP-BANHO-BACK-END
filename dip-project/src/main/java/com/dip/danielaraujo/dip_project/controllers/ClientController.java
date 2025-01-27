@@ -27,16 +27,6 @@ public class ClientController {
         }
     }
 
-    @PostMapping("/authentication")
-    public ResponseEntity<?> autenticatioClient(@RequestBody AuthenticationDTO autenticationDTO) {
-        try {
-            AuthenticationDTO authentication = clientService.authentication(autenticationDTO.email(), autenticationDTO.password());
-            return ResponseEntity.ok(authentication);
-        } catch (RuntimeException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<?> updateClient(@PathVariable String id, @RequestBody ClientDTO clientDTO) {
         try {
