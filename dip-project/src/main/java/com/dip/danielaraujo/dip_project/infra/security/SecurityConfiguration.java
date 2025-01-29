@@ -27,8 +27,8 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize.
                         requestMatchers(HttpMethod.POST, "/auth/login",  "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/clients/**").hasAnyRole("ADMIN", "CLIENT")
-                        .requestMatchers(HttpMethod.POST, "/dips/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/clients/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/dips/**", "/owners/**", "/clients/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/clients/**", "/dips/**").hasAnyRole("ADMIN", "CLIENT")
                         .anyRequest().authenticated()
                 )
