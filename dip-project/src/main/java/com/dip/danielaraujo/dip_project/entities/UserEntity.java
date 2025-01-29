@@ -24,6 +24,7 @@ public class UserEntity implements UserDetails {
     private UUID id;
     private String login;
     private String password;
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     public UserEntity(String login, String password, UserRole role) {

@@ -27,9 +27,6 @@ public class ClientEntity {
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
     private ImageClientEntity image = null;
 
-    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
-    private AuthenticationEntity authentication;
-
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<UserRatingEntity> userRatings;
 
@@ -41,6 +38,5 @@ public class ClientEntity {
         if (clientDTO.image() != null) {
             this.image = new ImageClientEntity(clientDTO.image(), this);
         }
-        this.authentication = new AuthenticationEntity(clientDTO.email(), clientDTO.password(), this);
     }
 }

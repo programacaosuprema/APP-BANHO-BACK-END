@@ -1,6 +1,5 @@
 package com.dip.danielaraujo.dip_project.controllers;
 
-import com.dip.danielaraujo.dip_project.dtos.AuthenticationDTO;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.services.ClientService;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/clients")
@@ -17,7 +15,7 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
-    @PostMapping()
+    @PostMapping("/register")
     public ResponseEntity<?> createClient(@RequestBody ClientDTO clientDTO) {
         try {
             ClientDTO createdClient = clientService.create(clientDTO);
@@ -26,8 +24,8 @@ public class ClientController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    @PutMapping("/{id}")
+    //melhoria a fazer
+    /*@PutMapping("/{id}")
     public ResponseEntity<?> updateClient(@PathVariable String id, @RequestBody ClientDTO clientDTO) {
         try {
             UUID uuid;
@@ -41,7 +39,8 @@ public class ClientController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
+    }*/
+
     @GetMapping("/{name}")
     public ResponseEntity<?> findClientByName(@PathVariable String name) {
         try{

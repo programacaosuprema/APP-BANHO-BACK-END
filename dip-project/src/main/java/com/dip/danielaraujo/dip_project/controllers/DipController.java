@@ -18,7 +18,7 @@ public class DipController {
     @Autowired
     private DipService dipService;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<?> createDip(@RequestBody DipDTO dipDTO) {
         try {
             DipDTO newDip = dipService.create(dipDTO);

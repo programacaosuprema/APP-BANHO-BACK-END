@@ -5,13 +5,12 @@ import com.dip.danielaraujo.dip_project.dtos.LoginResponseDTO;
 import com.dip.danielaraujo.dip_project.dtos.RegisterDTO;
 import com.dip.danielaraujo.dip_project.entities.UserEntity;
 import com.dip.danielaraujo.dip_project.infra.security.TokenService;
-import com.dip.danielaraujo.dip_project.repositories.UserRepository;
+import com.dip.danielaraujo.dip_project.services.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +23,7 @@ public class AuthenticationController {
     private AuthenticationManager manager;
 
     @Autowired
-    private UserRepository repository;
+    private AuthenticationService authService;
 
     @Autowired
     private TokenService tokenService;
@@ -45,16 +44,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO data) {
-        if (this.repository.findByLogin(data.login()) != null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        UserEntity newuser = new UserEntity(data.login(), encryptedPassword, data.role());
-
-        this.repository.save(newuser);
-
+        authService.register(data.login(), data.password(), data.role());
         return ResponseEntity.ok().build();
     }
-
 }
