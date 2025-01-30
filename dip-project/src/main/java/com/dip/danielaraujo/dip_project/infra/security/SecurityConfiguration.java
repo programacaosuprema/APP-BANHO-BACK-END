@@ -31,9 +31,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize.
                         requestMatchers(HttpMethod.POST, "/auth/login",  "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/clients/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/dips/**", "/owners/**", "/clients/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/dips/**", "/owners/**", "/clients").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/clients/**", "/dips/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/clients/").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.POST, "/clients/token").hasRole("CLIENT")
                         .anyRequest().authenticated()
                 )
                 .cors(cors -> cors.configurationSource(request -> {

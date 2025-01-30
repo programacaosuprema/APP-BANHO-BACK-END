@@ -1,5 +1,6 @@
 package com.dip.danielaraujo.dip_project.controllers;
 
+import com.dip.danielaraujo.dip_project.dtos.TokenDTO;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.services.ClientService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/clients")
@@ -21,6 +23,22 @@ public class ClientController {
             ClientDTO createdClient = clientService.create(clientDTO);
             return ResponseEntity.ok(createdClient);
         } catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/token")
+    public ResponseEntity<?> findClientByToken(@RequestBody TokenDTO token) {
+        try {
+            ClientDTO clientDTO= clientService.findByToken(token.token());
+
+            if (clientDTO!= null) {
+                return ResponseEntity.ok(clientDTO);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+
+        } catch (InvalidDataException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

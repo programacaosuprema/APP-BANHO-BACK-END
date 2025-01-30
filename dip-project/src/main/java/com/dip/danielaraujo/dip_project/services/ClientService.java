@@ -5,6 +5,7 @@ import com.dip.danielaraujo.dip_project.exceptions.ClientNotFoundException;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.entities.ClientEntity;
+import com.dip.danielaraujo.dip_project.infra.security.TokenService;
 import com.dip.danielaraujo.dip_project.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;;
@@ -18,6 +19,9 @@ public class ClientService {
 
     @Autowired
     private AuthenticationService authService;
+
+    @Autowired
+    private TokenService tokenService;
 
     public ClientDTO findById(UUID id){
         return new ClientDTO(this.clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Client not found")));
@@ -56,5 +60,16 @@ public class ClientService {
 
     public List<ClientDTO> findAll(){
         return this.clientRepository.findAll().stream().map(ClientDTO::fromEntity).toList();
+    }
+
+    public ClientDTO findByToken(String token) {
+        if (token == null || token.trim().isEmpty()) {
+            throw new InvalidDataException("Token cannot be empty.");
+        }else if (tokenService.validateToken(token).isBlank()){
+            throw new InvalidDataException("Invalid token.");
+        }else{
+            String email = tokenService.getClientEmailAfterDecodeToken(token);
+            return new ClientDTO(this.clientRepository.findByEmail(email));
+        }
     }
 }
