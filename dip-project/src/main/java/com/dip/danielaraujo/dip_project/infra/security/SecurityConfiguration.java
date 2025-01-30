@@ -14,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -29,9 +32,18 @@ public class SecurityConfiguration {
                         requestMatchers(HttpMethod.POST, "/auth/login",  "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/clients/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/dips/**", "/owners/**", "/clients/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/clients/**", "/dips/**").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/clients/**", "/dips/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/clients/").hasRole("CLIENT")
                         .anyRequest().authenticated()
                 )
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration configuration = new CorsConfiguration();
+                    configuration.setAllowedOriginPatterns(List.of("http://localhost:8081", "http://localhost:3000"));
+                    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    configuration.setAllowedHeaders(List.of("*"));
+                    configuration.setAllowCredentials(true);
+                    return configuration;
+                }))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
