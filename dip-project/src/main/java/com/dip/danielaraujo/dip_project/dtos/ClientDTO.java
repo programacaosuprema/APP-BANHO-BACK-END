@@ -44,7 +44,7 @@ public record ClientDTO(
                 client.getEmail(),
                 client.getPhoneNumber(),
                 client.getImage() != null ? new ImageDTO(client.getImage()) : null,
-                null // Para não expor a senha na conversão
+                null
         );
     }
 

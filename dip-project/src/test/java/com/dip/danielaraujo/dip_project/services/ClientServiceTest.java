@@ -83,6 +83,24 @@ public class ClientServiceTest {
         assertThrows(ClientNotFoundException.class, () -> clientService.findByName("Daniel"));
     }
 
+    @Test
+    @DisplayName("Should update a client and return the updated client details")
+    public void updateClientSuccess() {
+        ClientDTO clientDTO = createClient(name, lastName, email, phoneNumber, imageDTO, password);
+        ClientDTO createdClient = clientService.create(clientDTO);
+
+        String updatedName = "Daniel Updated";
+        String updatedLastName = "Araújo Updated";
+        String updatedEmail = email;
+        String updatedPhoneNumber = "98988060439";
+        ImageDTO updatedImageDTO = new ImageDTO(null, "monalisa", "src/img/", "JPG");
+        String updatePassword = "Teste123#";
+
+        ClientDTO updatedClient = clientService.update(createdClient.id(), createClient(updatedName, updatedLastName, updatedEmail, updatedPhoneNumber, updatedImageDTO, updatePassword));
+
+        assertClientDetails(updatedClient, updatedName, updatedLastName, updatedEmail, updatedPhoneNumber, updatedImageDTO);
+    }
+
     private void assertClientDetails(ClientDTO client, String expectedFirstName, String expectedLastName, String expectedEmail, String expectedPhoneNumber, ImageDTO expectedImage) {
         assertEquals(expectedFirstName, client.firstName());
         assertEquals(expectedLastName, client.lastName());

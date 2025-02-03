@@ -1,6 +1,5 @@
 package com.dip.danielaraujo.dip_project.controllers;
 
-import com.dip.danielaraujo.dip_project.dtos.TokenDTO;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.services.ClientService;
@@ -29,9 +28,10 @@ public class ClientController {
     }
 
     @PostMapping("/token")
-    public ResponseEntity<?> findClientByToken(@RequestBody TokenDTO token) {
+    public ResponseEntity<?> findClientByToken(@RequestHeader("Authorization") String authorizationHeader) {
         try {
-            ClientDTO clientDTO= clientService.findByToken(token.token());
+            String token = authorizationHeader.replace("Bearer ", "");
+            ClientDTO clientDTO= clientService.findByToken(token);
 
             if (clientDTO!= null) {
                 return ResponseEntity.ok(clientDTO);
@@ -43,8 +43,8 @@ public class ClientController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    //melhoria a fazer
-    /*@PutMapping("/{id}")
+
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateClient(@PathVariable String id, @RequestBody ClientDTO clientDTO) {
         try {
             UUID uuid;
@@ -58,7 +58,7 @@ public class ClientController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }*/
+    }
 
     @GetMapping("/{name}")
     public ResponseEntity<?> findClientByName(@PathVariable String name) {
@@ -91,5 +91,4 @@ public class ClientController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }
