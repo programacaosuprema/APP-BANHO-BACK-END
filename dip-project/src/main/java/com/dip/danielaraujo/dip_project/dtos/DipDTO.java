@@ -19,9 +19,9 @@ public record DipDTO(UUID id,
                      @Pattern(regexp = "^(AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO)$", message = "Estado inválido")
                      String state,
                      @NotBlank(message = "A cidade não pode estar em branco")
-                     @Max(value = 30, message = "O nome da cidade deve ter no máximo 30 caracteres")
+                     @Size(max = 30, message = "O nome da cidade deve ter no máximo 30 caracteres")
                      String city,
-                     @NotBlank(message = "A temperatura não pode estar em branco")
+                     @NotNull(message = "A temperatura não pode estar em branco")
                      BigDecimal temperature,
                      @NotBlank(message = "O acesso não pode estar em branco")
                      @ValidAccess
@@ -29,8 +29,7 @@ public record DipDTO(UUID id,
                      @NotBlank(message = "A localização não pode estar em branco")
                      String location,
                      @NotNull(message = "Deve haver pelo menos uma imagem")
-                     @Min(value = 1, message = "Deve haver pelo menos uma imagem")
-                     @Max(value = 5, message = "Não pode haver mais de 5 imagens")
+                     @Size(min = 1, max = 5, message = "Deve haver pelo menos uma imagem")
                      List<ImageDTO> images) {
     public DipDTO(DipEntity dip){
         this(dip.getId(), dip.getName(), dip.getDescription(),

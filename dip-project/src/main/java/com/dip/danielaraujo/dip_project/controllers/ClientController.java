@@ -44,7 +44,7 @@ public class ClientController {
         }
     }
 
-    @PutMapping("/{id}")
+   /* @PutMapping("/{id}")
     public ResponseEntity<?> updateClient(@PathVariable String id, @RequestBody ClientDTO clientDTO) {
         try {
             UUID uuid;
@@ -58,7 +58,7 @@ public class ClientController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
+    }*/
 
     @GetMapping("/{name}")
     public ResponseEntity<?> findClientByName(@PathVariable String name) {

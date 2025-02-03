@@ -44,7 +44,7 @@ public class ClientService {
         }
     }
 
-    public ClientDTO update(UUID id, ClientDTO clientDTO){
+    /*public ClientDTO update(UUID id, ClientDTO clientDTO){
         ClientEntity clientEntity = this.clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Client not found"));
         boolean updateLogin;
 
@@ -68,7 +68,7 @@ public class ClientService {
         } else {
             throw new InvalidDataException("Error updating client.");
         }
-    }
+    }*/
 
     public List<ClientDTO> findByName(String name){
         String str = "cannot be empty.";
