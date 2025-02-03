@@ -2,6 +2,7 @@ package com.dip.danielaraujo.dip_project.controllers;
 
 import com.dip.danielaraujo.dip_project.dtos.DipDTO;
 import com.dip.danielaraujo.dip_project.services.DipService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class DipController {
     private DipService dipService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> createDip(@RequestBody DipDTO dipDTO) {
+    public ResponseEntity<?> createDip(@RequestBody @Valid DipDTO dipDTO) {
         try {
             DipDTO newDip = dipService.create(dipDTO);
             return new ResponseEntity<>(newDip, HttpStatus.CREATED);

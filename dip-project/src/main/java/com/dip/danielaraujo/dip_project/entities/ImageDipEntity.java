@@ -1,6 +1,6 @@
 package com.dip.danielaraujo.dip_project.entities;
 
-import com.dip.danielaraujo.dip_project.dtos.ImageDipDTO;
+import com.dip.danielaraujo.dip_project.dtos.ImageDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,29 +12,13 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageDipEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-    private String name;
-    private String src;
-    @Column(name = "file_type")
-    private String fileType;
-
+public class ImageDipEntity extends ImageEntity {
     @ManyToOne
     @JoinColumn(name = "dip_id")
     private DipEntity dip;
 
-    public ImageDipEntity(ImageDipDTO imageDTO, DipEntity dip) {
-        if (imageDTO != null) {
-            this.name = imageDTO.name();
-            this.src = imageDTO.src();
-            this.fileType = imageDTO.filetype();
-        } else {
-            this.name = null;
-            this.src = null;
-            this.fileType = null;
-        }
+    public ImageDipEntity(ImageDTO imageDTO, DipEntity dip) {
+        super(null, imageDTO.name(), imageDTO.src(), imageDTO.filetype());
         this.dip = dip;
     }
 }

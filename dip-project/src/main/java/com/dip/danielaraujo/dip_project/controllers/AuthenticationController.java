@@ -29,7 +29,7 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO data) {
+    public ResponseEntity<?> login( @Valid @RequestBody AuthenticationDTO data) {
         //criptografia
         var userNamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
 

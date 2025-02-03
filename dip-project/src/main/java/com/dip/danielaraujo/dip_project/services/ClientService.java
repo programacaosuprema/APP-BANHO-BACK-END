@@ -1,5 +1,6 @@
 package com.dip.danielaraujo.dip_project.services;
 
+import com.dip.danielaraujo.dip_project.entities.ImageClientEntity;
 import com.dip.danielaraujo.dip_project.enums.UserRole;
 import com.dip.danielaraujo.dip_project.exceptions.ClientNotFoundException;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
@@ -7,6 +8,7 @@ import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.entities.ClientEntity;
 import com.dip.danielaraujo.dip_project.infra.security.TokenService;
 import com.dip.danielaraujo.dip_project.repositories.ClientRepository;
+import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;;
 import java.util.List;
@@ -29,15 +31,15 @@ public class ClientService {
 
     public ClientDTO create(ClientDTO clientDTO){
 
-        ValidationService validate = new ValidationService(clientDTO);
-
         if(this.clientRepository.existsByEmail(clientDTO.email())){
             throw new RuntimeException("Email já cadastrado");
         }else {
             UserRole role = UserRole.CLIENT;
+
             authService.register(clientDTO.email(), clientDTO.password(), role);
 
             ClientEntity clientEntity = new ClientEntity(clientDTO);
+
             return new ClientDTO(clientRepository.save(clientEntity));
         }
     }

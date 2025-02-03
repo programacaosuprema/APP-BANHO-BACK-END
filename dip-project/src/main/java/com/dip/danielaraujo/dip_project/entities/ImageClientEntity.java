@@ -1,6 +1,6 @@
 package com.dip.danielaraujo.dip_project.entities;
 
-import com.dip.danielaraujo.dip_project.dtos.ImageClientDTO;
+import com.dip.danielaraujo.dip_project.dtos.ImageDTO;
 import com.dip.danielaraujo.dip_project.enums.FileTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,29 +16,21 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageClientEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-    private String name;
-    private String src;
-    @Column(name = "file_type")
+public class ImageClientEntity extends ImageEntity {
     @Enumerated(EnumType.STRING)
-    private FileTypeEnum fileType;
+    private FileTypeEnum fileTypeEnum;
 
     @OneToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private ClientEntity client;
 
-    public ImageClientEntity(ImageClientDTO imageDTO, ClientEntity client) {
-        this.name = imageDTO.name();
-        this.src = imageDTO.src();
+    public ImageClientEntity(ImageDTO imageDTO, ClientEntity client) {
+        super(null, imageDTO.name(), imageDTO.src(), imageDTO.filetype());
         try {
-            this.fileType = FileTypeEnum.valueOf(imageDTO.filetype().toUpperCase());
-        }catch (Exception e){
-            this.fileType = null;
+            this.fileTypeEnum = FileTypeEnum.valueOf(imageDTO.filetype().toUpperCase());
+        } catch (Exception e) {
+            this.fileTypeEnum = null;
         }
-
         this.client = client;
     }
 }

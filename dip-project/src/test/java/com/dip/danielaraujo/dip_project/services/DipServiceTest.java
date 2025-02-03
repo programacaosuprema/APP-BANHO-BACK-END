@@ -4,7 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import com.dip.danielaraujo.dip_project.dtos.DipDTO;
-import com.dip.danielaraujo.dip_project.dtos.ImageDipDTO;
+import com.dip.danielaraujo.dip_project.dtos.ImageDTO;
 import com.dip.danielaraujo.dip_project.entities.DipEntity;
 import com.dip.danielaraujo.dip_project.exceptions.DipNotFoundException;
 import com.dip.danielaraujo.dip_project.repositories.DipRepository;
@@ -24,9 +24,6 @@ public class DipServiceTest {
     @Mock
     private DipRepository dipRepository;
 
-    @Mock
-    private ValidationService validationService;
-
     @InjectMocks
     private DipService dipService;
 
@@ -42,10 +39,10 @@ public class DipServiceTest {
         MockitoAnnotations.openMocks(this);
 
         // Criando imagens
-        ImageDipDTO image1 = new ImageDipDTO(id_image1, "dip1", "https://dip.com.br/src/images", "JPEG");
-        ImageDipDTO image2 = new ImageDipDTO(id_image2, "dip2", "https://dip.com.br/src/images", "PNG");
+        ImageDTO image1 = new ImageDTO(id_image1, "dip1", "https://dip.com.br/src/images", "JPEG");
+        ImageDTO image2 = new ImageDTO(id_image2, "dip2", "https://dip.com.br/src/images", "PNG");
 
-        List<ImageDipDTO> images = new ArrayList<>() {{
+        List<ImageDTO> images = new ArrayList<>() {{
             add(image1);
             add(image2);
         }};
@@ -134,10 +131,10 @@ public class DipServiceTest {
         when(dipRepository.findById(any(UUID.class))).thenReturn(Optional.of(dipEntity));
         when(dipRepository.save(any(DipEntity.class))).thenReturn(dipEntity);
 
-        ImageDipDTO image1 = new ImageDipDTO(UUID.randomUUID(), "dip_apdate1", "https://dip.com.br/src/images", "PNG");
-        ImageDipDTO image2 = new ImageDipDTO(UUID.randomUUID(), "dip_apdate2", "https://dip.com.br/src/images", "PNG");
+        ImageDTO image1 = new ImageDTO(UUID.randomUUID(), "dip_apdate1", "https://dip.com.br/src/images", "PNG");
+        ImageDTO image2 = new ImageDTO(UUID.randomUUID(), "dip_apdate2", "https://dip.com.br/src/images", "PNG");
 
-        List<ImageDipDTO> images = new ArrayList<>() {{
+        List<ImageDTO> images = new ArrayList<>() {{
             add(image1);
             add(image2);
         }};
@@ -157,10 +154,10 @@ public class DipServiceTest {
     @Test
     public void testUpdateDipNotFound() {
         when(dipRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
-        ImageDipDTO image1 = new ImageDipDTO(UUID.randomUUID(), "dip_apdate1", "https://dip.com.br/src/images", "PNG");
-        ImageDipDTO image2 = new ImageDipDTO(UUID.randomUUID(), "dip_apdate2", "https://dip.com.br/src/images", "PNG");
+        ImageDTO image1 = new ImageDTO(UUID.randomUUID(), "dip_apdate1", "https://dip.com.br/src/images", "PNG");
+        ImageDTO image2 = new ImageDTO(UUID.randomUUID(), "dip_apdate2", "https://dip.com.br/src/images", "PNG");
 
-        List<ImageDipDTO> images = new ArrayList<>() {{
+        List<ImageDTO> images = new ArrayList<>() {{
             add(image1);
             add(image2);
         }};

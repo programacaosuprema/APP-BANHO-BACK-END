@@ -2,8 +2,10 @@ package com.dip.danielaraujo.dip_project.controller;
 
 import com.dip.danielaraujo.dip_project.controllers.ClientController;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
+import com.dip.danielaraujo.dip_project.dtos.ImageDTO;
 import com.dip.danielaraujo.dip_project.services.ClientService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -16,14 +18,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 public class ClientControllerTest {
+
+    private final String name = "Daniel";
+    private final String lastName = "Araujo";
+    private final String email = "daniel@gmail.com";
+    private final String phoneNumber = "98988060439";
+    private final ImageDTO imageDTO = new ImageDTO(null, "monalisa", "src/img/", "JPG");
+    private final String password = "Teste123#";
 
     private MockMvc mockMvc;
 
@@ -39,6 +50,10 @@ public class ClientControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(clientController).build();
     }
 
+    private ClientDTO createClient(String firstName, String lastName, String email, String phoneNumber, ImageDTO imageDTO, String password) {
+        return new ClientDTO(null, firstName, lastName, email, phoneNumber, imageDTO, password);
+    }
+
     // Helper method to convert objects to JSON strings
     private static String asJsonString(final Object obj) {
         try {
@@ -50,18 +65,17 @@ public class ClientControllerTest {
 
     @Test
     public void testCreateClientSuccess() throws Exception {
-        // Ajuste para o ClientDTO record
-        ClientDTO clientDTO = new ClientDTO(UUID.randomUUID(), "John", "Doe", "john.doe@example.com", "555-1234", null, "password123");
+        ClientDTO clientDTO = new ClientDTO(UUID.randomUUID(), name, lastName, email, phoneNumber, imageDTO, password);
 
         when(clientService.create(any(ClientDTO.class))).thenReturn(clientDTO);
 
-        mockMvc.perform(post("/clients")
+        mockMvc.perform(post("/clients/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(clientDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName").value("John"))
-                .andExpect(jsonPath("$.lastName").value("Doe"))
-                .andExpect(jsonPath("$.email").value("john.doe@example.com"));
+                .andExpect(jsonPath("$.firstName").value(name))
+                .andExpect(jsonPath("$.lastName").value(lastName))
+                .andExpect(jsonPath("$.email").value(email));
 
         verify(clientService, times(1)).create(any(ClientDTO.class));
     }
@@ -80,25 +94,6 @@ public class ClientControllerTest {
 
         verify(clientService, times(1)).create(any(ClientDTO.class));
     }
-
-    /*@Test
-    public void testUpdateClientSuccess() throws Exception {
-        UUID id = UUID.randomUUID();
-        ClientDTO clientDTO = new ClientDTO(id, "John", "Doe", "john.doe@example.com", "555-1234", null, "newPassword");
-
-        when(clientService.update(eq(id), any(ClientDTO.class))).thenReturn(clientDTO);
-
-        mockMvc.perform(put("/clients/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(clientDTO)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName").value("John"))
-                .andExpect(jsonPath("$.lastName").value("Doe"))
-                .andExpect(jsonPath("$.email").value("john.doe@example.com"))
-                .andExpect(jsonPath("$.password").value("newPassword"));
-
-        verify(clientService, times(1)).update(eq(id), any(ClientDTO.class));
-    }*/
 
     @Test
     public void testFindClientByNameSuccess() throws Exception {
@@ -142,5 +137,26 @@ public class ClientControllerTest {
                 .andExpect(status().isNotFound());
 
         verify(clientService, times(1)).findByName("Unknown");
+    }
+
+    @Test
+    @DisplayName("Should throw MethodArgumentNotValidException when creating a client with invalid data")
+    public void createClientWithMethodArgumentNotValidException() {
+        assertInvalidDataMethodArgumentNotValidException("", lastName, email, phoneNumber, imageDTO, password);
+        assertInvalidDataMethodArgumentNotValidException(name, "", email, phoneNumber, imageDTO, password);
+        assertInvalidDataMethodArgumentNotValidException(name, lastName, "", phoneNumber, imageDTO, password);
+        assertInvalidDataMethodArgumentNotValidException(name, lastName, email, phoneNumber, imageDTO, "");
+        assertInvalidDataMethodArgumentNotValidException("Daniel8000", lastName, email, phoneNumber, imageDTO, password);
+        assertInvalidDataMethodArgumentNotValidException(name, "Araujo 80@#", email, phoneNumber, imageDTO, password);
+        assertInvalidDataMethodArgumentNotValidException(name, lastName, "danielgmail.com", phoneNumber, imageDTO, password);
+        assertInvalidDataMethodArgumentNotValidException(name, lastName, email, "998319", imageDTO, password);
+        assertInvalidDataMethodArgumentNotValidException(name, lastName, email, phoneNumber, imageDTO, "1234567");
+        ImageDTO image = new ImageDTO(null, "monalisa", "src/img/", "PDF");
+        assertInvalidDataMethodArgumentNotValidException(name, lastName, email, phoneNumber, image, password);
+    }
+
+    private void assertInvalidDataMethodArgumentNotValidException(String firstName, String lastName, String email, String phoneNumber, ImageDTO imageDTO, String password) {
+        ClientDTO clientDTO = createClient(firstName, lastName, email, phoneNumber, imageDTO, password);
+        assertThrows(MethodArgumentNotValidException.class, () -> clientService.create(clientDTO));
     }
 }

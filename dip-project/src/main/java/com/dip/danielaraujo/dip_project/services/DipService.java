@@ -20,12 +20,7 @@ public class DipService {
     @Autowired
     private DipRepository dipRepository;
 
-    @Autowired
-    private ValidationService validate;
-
     public DipDTO create(DipDTO dipDTO) {
-
-        this.validate = new ValidationService(dipDTO);
 
         DipEntity dip = new DipEntity(dipDTO);
 
@@ -55,8 +50,6 @@ public class DipService {
     public DipDTO update(UUID id, DipDTO dipDTO) {
         DipEntity existingDip = dipRepository.findById(id)
                 .orElseThrow(() -> new DipNotFoundException("Dip com ID " + id + " não encontrado"));
-
-        validate = new ValidationService(dipDTO);
 
         existingDip.setName(dipDTO.name());
         existingDip.setDescription(dipDTO.description());

@@ -1,6 +1,7 @@
 package com.dip.danielaraujo.dip_project.controllers;
 import com.dip.danielaraujo.dip_project.dtos.OwnerDTO;
 import com.dip.danielaraujo.dip_project.services.OwnerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ public class OwnerController {
     private OwnerService ownerService;
 
     @PostMapping()
-    public OwnerDTO create(@RequestBody OwnerDTO owner){
+    public OwnerDTO create(@RequestBody @Valid OwnerDTO owner){
         return ownerService.createOwner(owner);
     }
 

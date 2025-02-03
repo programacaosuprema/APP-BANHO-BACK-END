@@ -4,6 +4,7 @@ import com.dip.danielaraujo.dip_project.dtos.TokenDTO;
 import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.services.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class ClientController {
     private ClientService clientService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> createClient(@RequestBody ClientDTO clientDTO) {
+    public ResponseEntity<?> createClient(@RequestBody @Valid ClientDTO clientDTO) {
         try {
             ClientDTO createdClient = clientService.create(clientDTO);
             return ResponseEntity.ok(createdClient);

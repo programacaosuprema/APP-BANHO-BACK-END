@@ -1,7 +1,6 @@
 package com.dip.danielaraujo.dip_project.entities;
 
 import com.dip.danielaraujo.dip_project.dtos.DipDTO;
-import com.dip.danielaraujo.dip_project.dtos.ImageDipDTO;
 import com.dip.danielaraujo.dip_project.enums.AccessTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,9 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Entity
