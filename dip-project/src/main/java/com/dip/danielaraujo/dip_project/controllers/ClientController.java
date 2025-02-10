@@ -27,7 +27,7 @@ public class ClientController {
         }
     }
 
-    @PostMapping("/token")
+    @GetMapping("/search")
     public ResponseEntity<?> findClientByToken(@RequestHeader("Authorization") String authorizationHeader) {
         try {
             String token = authorizationHeader.replace("Bearer ", "");

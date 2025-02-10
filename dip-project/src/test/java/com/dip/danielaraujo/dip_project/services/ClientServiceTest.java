@@ -3,7 +3,6 @@ package com.dip.danielaraujo.dip_project.services;
 import com.dip.danielaraujo.dip_project.dtos.ImageDTO;
 import com.dip.danielaraujo.dip_project.entities.UserEntity;
 import com.dip.danielaraujo.dip_project.exceptions.ClientNotFoundException;
-import com.dip.danielaraujo.dip_project.exceptions.InvalidDataException;
 import com.dip.danielaraujo.dip_project.dtos.ClientDTO;
 import com.dip.danielaraujo.dip_project.infra.security.TokenService;
 import jakarta.transaction.Transactional;
@@ -11,9 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,7 +27,7 @@ public class ClientServiceTest {
     private final ImageDTO imageDTO = new ImageDTO(null, "monalisa", "src/img/", "JPG");
     private final String password = "Teste123#";
 
-    @Autowired
+    @MockBean
     private ClientService clientService;
 
     @Autowired
@@ -91,13 +90,14 @@ public class ClientServiceTest {
 
         String updatedName = "Daniel Updated";
         String updatedLastName = "Araújo Updated";
-        String updatedEmail = email;
+        String updatedEmail = "dani@gmail.com";
         String updatedPhoneNumber = "98988060439";
         ImageDTO updatedImageDTO = new ImageDTO(null, "monalisa", "src/img/", "JPG");
         String updatePassword = "Teste123#";
 
-        //ClientDTO updatedClient = clientService.update(createdClient.id(), createClient(updatedName, updatedLastName, updatedEmail, updatedPhoneNumber, updatedImageDTO, updatePassword));
+        Boolean teste = clientService.update(createdClient.id(), createClient(updatedName, updatedLastName, updatedEmail, updatedPhoneNumber, updatedImageDTO, updatePassword));
 
+        assertEquals(true, teste);
         //assertClientDetails(updatedClient, updatedName, updatedLastName, updatedEmail, updatedPhoneNumber, updatedImageDTO);
     }
 

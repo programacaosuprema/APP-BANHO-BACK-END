@@ -44,31 +44,31 @@ public class ClientService {
         }
     }
 
-    /*public ClientDTO update(UUID id, ClientDTO clientDTO){
+    private Boolean updateLogin(String newEmail, String oldEmail){
+        if (!newEmail.equalsIgnoreCase(oldEmail)){
+            return authService.updateLogin(newEmail, oldEmail);
+        }
+        return false;
+    }
+
+
+    public Boolean update(UUID id, ClientDTO clientDTO){
         ClientEntity clientEntity = this.clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Client not found"));
-        boolean updateLogin;
 
-        if (!clientDTO.email().equals(clientEntity.getEmail())) {
-            updateLogin = authService.updateLogin(clientDTO.email(), clientEntity.getEmail());
-        } else {
-            updateLogin = true;
+        return updateLogin(clientDTO.email(), clientEntity.getEmail());
+
+        /*clientEntity.setFirstName(clientDTO.firstName());
+        clientEntity.setLastName(clientDTO.lastName());
+        clientEntity.setEmail(clientDTO.email());
+        clientEntity.setPhoneNumber(clientDTO.phoneNumber());
+
+        if (clientDTO.image() != null) {
+            ImageClientEntity image = new ImageClientEntity(clientDTO.image(), clientEntity);
+            clientEntity.setImage(image);
         }
+        return new ClientDTO(this.clientRepository.save(clientEntity));*/
 
-        if (updateLogin) {
-            clientEntity.setFirstName(clientDTO.firstName());
-            clientEntity.setLastName(clientDTO.lastName());
-            clientEntity.setEmail(clientDTO.email());
-            clientEntity.setPhoneNumber(clientDTO.phoneNumber());
-
-            if (clientDTO.image() != null) {
-                ImageClientEntity image = new ImageClientEntity(clientDTO.image(), clientEntity);
-                clientEntity.setImage(image);
-            }
-            return new ClientDTO(this.clientRepository.save(clientEntity));
-        } else {
-            throw new InvalidDataException("Error updating client.");
-        }
-    }*/
+    }
 
     public List<ClientDTO> findByName(String name){
         String str = "cannot be empty.";

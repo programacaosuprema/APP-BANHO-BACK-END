@@ -13,9 +13,9 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     UserDetails findByLogin(String login);
-    /*@Modifying
+    @Modifying
     @Transactional
     @Query("UPDATE UserEntity u SET u.login = :login WHERE u.login = :oldLogin")
-    int updateUserLogin(@Param("login") String login, @Param("oldLogin") String oldLogin);*/
+    int updateUserLogin(@Param("login") String login, @Param("oldLogin") String oldLogin);
 
 }
