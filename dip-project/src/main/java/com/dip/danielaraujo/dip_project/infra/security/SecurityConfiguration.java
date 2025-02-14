@@ -31,10 +31,10 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/clients/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/clients/search").hasRole("CLIENT")
                         .requestMatchers(HttpMethod.POST, "/dips/**", "/owners/**", "/clients").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/dips/search").permitAll() // <- Esta regra precisa vir ANTES da próxima linha
-                        .requestMatchers(HttpMethod.GET, "/clients/**", "/dips/**").hasAnyRole("ADMIN", "CLIENT") // Adicione CLIENT aqui
-                        .requestMatchers(HttpMethod.POST, "/clients/token").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/clients/**", "/dips/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .cors(cors -> cors.configurationSource(request -> {

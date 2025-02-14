@@ -3,6 +3,7 @@ package com.dip.danielaraujo.dip_project.dtos;
 import com.dip.danielaraujo.dip_project.entities.DipEntity;
 import com.dip.danielaraujo.dip_project.enums.AccessTypeEnum;
 import com.dip.danielaraujo.dip_project.validation.dip.ValidAccess;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
@@ -30,6 +31,7 @@ public record DipDTO(UUID id,
                      String location,
                      @NotNull(message = "Deve haver pelo menos uma imagem")
                      @Size(min = 1, max = 5, message = "Deve haver pelo menos uma imagem")
+                     @Valid
                      List<ImageDTO> images) {
     public DipDTO(DipEntity dip){
         this(dip.getId(), dip.getName(), dip.getDescription(),

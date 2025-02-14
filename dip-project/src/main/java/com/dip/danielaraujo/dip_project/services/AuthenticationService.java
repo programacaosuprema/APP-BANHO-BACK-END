@@ -26,7 +26,7 @@ public class AuthenticationService {
         userRepository.save(newUser);
     }
 
-    public Boolean updateLogin(String newLogin, String oldLogin){
-        return userRepository.updateUserLogin(newLogin, oldLogin) > 0;
+    public void updateLogin(String newLogin, String oldLogin){
+        //return userRepository.updateUserLogin(newLogin, oldLogin) > 0;
     }
 }

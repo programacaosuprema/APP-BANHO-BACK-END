@@ -31,7 +31,7 @@ public class ClientController {
     public ResponseEntity<?> findClientByToken(@RequestHeader("Authorization") String authorizationHeader) {
         try {
             String token = authorizationHeader.replace("Bearer ", "");
-            ClientDTO clientDTO= clientService.findByToken(token);
+            ClientDTO clientDTO = clientService.findByToken(token);
 
             if (clientDTO!= null) {
                 return ResponseEntity.ok(clientDTO);

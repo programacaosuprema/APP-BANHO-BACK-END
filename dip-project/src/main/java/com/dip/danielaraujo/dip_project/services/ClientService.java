@@ -44,18 +44,18 @@ public class ClientService {
         }
     }
 
-    private Boolean updateLogin(String newEmail, String oldEmail){
+   /* private Boolean updateLogin(String newEmail, String oldEmail){
         if (!newEmail.equalsIgnoreCase(oldEmail)){
             return authService.updateLogin(newEmail, oldEmail);
         }
         return false;
     }
+*/
 
-
-    public Boolean update(UUID id, ClientDTO clientDTO){
+    public void update(UUID id, ClientDTO clientDTO){
         ClientEntity clientEntity = this.clientRepository.findById(id).orElseThrow(() -> new ClientNotFoundException("Client not found"));
 
-        return updateLogin(clientDTO.email(), clientEntity.getEmail());
+        //return updateLogin(clientDTO.email(), clientEntity.getEmail());
 
         /*clientEntity.setFirstName(clientDTO.firstName());
         clientEntity.setLastName(clientDTO.lastName());
